@@ -51,6 +51,7 @@
             this.contenedor = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.lblusuario = new System.Windows.Forms.Label();
+            this.menupermisos = new FontAwesome.Sharp.IconMenuItem();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +60,7 @@
             this.menu.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuusuarios,
+            this.menupermisos,
             this.menumantenedor,
             this.menuventas,
             this.menucompras,
@@ -109,7 +111,7 @@
             this.submenucategoria.IconColor = System.Drawing.Color.Black;
             this.submenucategoria.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenucategoria.Name = "submenucategoria";
-            this.submenucategoria.Size = new System.Drawing.Size(125, 22);
+            this.submenucategoria.Size = new System.Drawing.Size(180, 22);
             this.submenucategoria.Text = "Categoria";
             this.submenucategoria.Click += new System.EventHandler(this.submenucategoria_Click);
             // 
@@ -119,14 +121,14 @@
             this.submenuproducto.IconColor = System.Drawing.Color.Black;
             this.submenuproducto.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuproducto.Name = "submenuproducto";
-            this.submenuproducto.Size = new System.Drawing.Size(125, 22);
+            this.submenuproducto.Size = new System.Drawing.Size(180, 22);
             this.submenuproducto.Text = "Producto";
             this.submenuproducto.Click += new System.EventHandler(this.submenuproducto_Click);
             // 
             // submenunegocio
             // 
             this.submenunegocio.Name = "submenunegocio";
-            this.submenunegocio.Size = new System.Drawing.Size(125, 22);
+            this.submenunegocio.Size = new System.Drawing.Size(180, 22);
             this.submenunegocio.Text = "Negocio";
             this.submenunegocio.Click += new System.EventHandler(this.submenunegocio_Click);
             // 
@@ -247,14 +249,14 @@
             // reporteToolStripMenuItem
             // 
             this.reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
-            this.reporteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reporteToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.reporteToolStripMenuItem.Text = "Reporte Compras";
             this.reporteToolStripMenuItem.Click += new System.EventHandler(this.reporteToolStripMenuItem_Click);
             // 
             // reporteVentasToolStripMenuItem
             // 
             this.reporteVentasToolStripMenuItem.Name = "reporteVentasToolStripMenuItem";
-            this.reporteVentasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reporteVentasToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.reporteVentasToolStripMenuItem.Text = "Reporte Ventas";
             this.reporteVentasToolStripMenuItem.Click += new System.EventHandler(this.reporteVentasToolStripMenuItem_Click);
             // 
@@ -322,6 +324,20 @@
             this.lblusuario.TabIndex = 1;
             this.lblusuario.Text = "lblusuario";
             // 
+            // menupermisos
+            // 
+            this.menupermisos.AutoSize = false;
+            this.menupermisos.IconChar = FontAwesome.Sharp.IconChar.UserGear;
+            this.menupermisos.IconColor = System.Drawing.Color.Black;
+            this.menupermisos.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.menupermisos.IconSize = 50;
+            this.menupermisos.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.menupermisos.Name = "menupermisos";
+            this.menupermisos.Size = new System.Drawing.Size(122, 69);
+            this.menupermisos.Text = "Gestion Permisos";
+            this.menupermisos.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.menupermisos.Click += new System.EventHandler(this.menupermisos_Click);
+            // 
             // Inicio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -370,6 +386,7 @@
         private System.Windows.Forms.ToolStripMenuItem submenunegocio;
         private System.Windows.Forms.ToolStripMenuItem reporteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reporteVentasToolStripMenuItem;
+        private FontAwesome.Sharp.IconMenuItem menupermisos;
     }
 }
 

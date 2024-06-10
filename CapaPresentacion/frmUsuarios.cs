@@ -38,9 +38,9 @@ namespace CapaPresentacion
             //{
             //    cborol.Items.Add(new OpcionCombo() { Valor = item.IdRol, Texto = item.Descripcion });
             //}
-            cborol.DisplayMember = "Texto";
-            cborol.ValueMember = "Valor";
-            cborol.SelectedIndex = 0;
+            //cborol.DisplayMember = "Texto";
+            //cborol.ValueMember = "Valor";
+            //cborol.SelectedIndex = 0;
 
 
             foreach (DataGridViewColumn columna in dgvdata.Columns)
