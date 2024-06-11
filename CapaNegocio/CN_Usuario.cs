@@ -40,10 +40,10 @@ namespace CapaNegocio
             return usuario;
         }
 
-        public bool VerificarPermiso(int idUsuario, string nombrePermiso)
+        public bool VerificarPermiso(string Documento, string nombrePermiso)
         {
             CN_Permiso permisoNegocio = new CN_Permiso();
-            List<Permiso> permisos = permisoNegocio.ObtenerPermisosPorDocumento(idUsuario);
+            List<Permiso> permisos = permisoNegocio.ObtenerPermisosPorDocumento(Documento);
             return permisos.Any(p => p.Nombre == nombrePermiso);
         }
 
