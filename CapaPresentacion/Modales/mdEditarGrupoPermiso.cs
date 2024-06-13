@@ -1,67 +1,62 @@
-﻿using CapaNegocio;
+﻿using CapaEntidad;
+using CapaNegocio;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CapaPresentacion.Modales
 {
     public partial class mdEditarGrupoPermiso : Form
     {
+        private int IdGrupoPermiso;
         private CN_Permiso permisoService = new CN_Permiso();
-        private int idGrupoPermiso;
 
         public mdEditarGrupoPermiso(int idGrupoPermiso)
         {
             InitializeComponent();
-            this.idGrupoPermiso = idGrupoPermiso;
+            this.IdGrupoPermiso = idGrupoPermiso;
         }
 
         private void mdEditarGrupoPermiso_Load(object sender, EventArgs e)
         {
-            var grupoPermiso = permisoService.ObtenerGrupoPermisoPorId(idGrupoPermiso);
+            var grupoPermiso = permisoService.ObtenerGrupoPermisoPorId(IdGrupoPermiso);
             txtNombreGrupo.Text = grupoPermiso.Nombre;
-            CargarPermisos(grupoPermiso.IdGrupoPermiso);
-        }
 
-        private void CargarPermisos(int idGrupoPermiso)
-        {
-            var permisos = permisoService.ListarPermisosConEstadoParaGrupo(idGrupoPermiso);
-            dgvPermisos.DataSource = permisos;
-            dgvPermisos.Columns["IdPermiso"].Visible = false;
+            var permisos = permisoService.ListarPermisosConEstadoParaGrupo(IdGrupoPermiso);
+            dgvPermisos.Rows.Clear();
+            foreach (var permiso in permisos)
+            {
+                dgvPermisos.Rows.Add(permiso.Asignado, permiso.Nombre);
+            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNombreGrupo.Text))
-            {
-                MessageBox.Show("Ingrese un nombre para el grupo de permisos.");
-                return;
-            }
-
-            permisoService.EditarGrupoPermiso(idGrupoPermiso, txtNombreGrupo.Text);
+            string nuevoNombre = txtNombreGrupo.Text.Trim();
+            permisoService.EditarGrupoPermiso(IdGrupoPermiso, nuevoNombre);
 
             foreach (DataGridViewRow row in dgvPermisos.Rows)
             {
-                int idPermiso = Convert.ToInt32(row.Cells["IdPermiso"].Value);
-                bool asignado = Convert.ToBoolean(row.Cells["Asignado"].Value);
+                if (row.Cells["colAsignado"].Value != null && row.Cells["colNombrePermiso"].Value != null)
+                {
+                    bool asignado = Convert.ToBoolean(row.Cells["colAsignado"].Value);
+                    string nombrePermiso = row.Cells["colNombrePermiso"].Value.ToString();
 
-                if (asignado)
-                {
-                    permisoService.AsignarPermisoAGrupo(idGrupoPermiso, idPermiso);
-                }
-                else
-                {
-                    permisoService.RevocarPermisoDeGrupo(idGrupoPermiso, idPermiso);
+                    var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
+
+                    if (asignado)
+                    {
+                        permisoService.AsignarPermisoAGrupo(IdGrupoPermiso, permiso.IdPermiso);
+                    }
+                    else
+                    {
+                        permisoService.RevocarPermisoDeGrupo(IdGrupoPermiso, permiso.IdPermiso);
+                    }
                 }
             }
 
             this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

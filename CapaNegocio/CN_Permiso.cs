@@ -356,14 +356,31 @@ namespace CapaNegocio
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO GruposPermisosDetalles (IdGrupoPermiso, IdPermiso) VALUES (@IdGrupoPermiso, @IdPermiso)";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
-                cmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+                // Primero verifica si el permiso ya está asignado al grupo
+                string checkQuery = "SELECT COUNT(*) FROM GruposPermisosDetalles WHERE IdGrupoPermiso = @IdGrupoPermiso AND IdPermiso = @IdPermiso";
+                SqlCommand checkCmd = new SqlCommand(checkQuery, conn);
+                checkCmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                checkCmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
                 conn.Open();
-                cmd.ExecuteNonQuery();
+                int count = (int)checkCmd.ExecuteScalar();
+                conn.Close();
+
+                // Si el permiso no está asignado, procede a insertarlo
+                if (count == 0)
+                {
+                    string query = "INSERT INTO GruposPermisosDetalles (IdGrupoPermiso, IdPermiso) VALUES (@IdGrupoPermiso, @IdPermiso)";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                    cmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
         }
+
 
         public void RevocarPermisoDeGrupo(int idGrupoPermiso, int idPermiso)
         {
@@ -373,10 +390,13 @@ namespace CapaNegocio
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
                 cmd.Parameters.AddWithValue("@IdPermiso", idPermiso);
+
                 conn.Open();
                 cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
+
 
     }
 }
