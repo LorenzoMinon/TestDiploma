@@ -12,6 +12,7 @@ using CapaPresentacion.Utilidades;
 
 using CapaEntidad;
 using CapaNegocio;
+using CapaPresentacion.Modales;
 
 namespace CapaPresentacion
 {
@@ -283,6 +284,21 @@ namespace CapaPresentacion
             }
         }
 
+        private void btnAsignarPermisos_Click(object sender, EventArgs e)
+        {
+            if (dgvdata.CurrentRow != null)
+            {
+                int idUsuario = Convert.ToInt32(dgvdata.CurrentRow.Cells["Id"].Value);
+                mdAsignarPermisos formModal = new mdAsignarPermisos(idUsuario);
+                formModal.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione un usuario de la lista.");
+            }
+        }
+
+
         private void btnlimpiar_Click(object sender, EventArgs e)
         {
             Limpiar();
@@ -297,5 +313,7 @@ namespace CapaPresentacion
         {
 
         }
+
+
     }
 }
