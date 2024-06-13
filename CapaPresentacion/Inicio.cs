@@ -27,6 +27,8 @@ namespace CapaPresentacion
             else
             usuarioActual = objusuario;
 
+
+
             InitializeComponent();
         }
 
@@ -46,6 +48,7 @@ namespace CapaPresentacion
             //}
 
             lblusuario.Text = usuarioActual.NombreCompleto;
+
         }
 
 
@@ -82,10 +85,6 @@ namespace CapaPresentacion
         private void menuusuarios_Click(object sender, EventArgs e)
         {
             AbrirFormulario((IconMenuItem)sender, new frmUsuarios());
-        }
-        private void menupermisos_Click(object sender, EventArgs e)
-        {
-            AbrirFormulario((IconMenuItem)sender, new frmGestionPermisos());
         }
 
         private void submenucategoria_Click(object sender, EventArgs e)
@@ -153,6 +152,14 @@ namespace CapaPresentacion
 
         }
 
+        private void submenupermisossimples_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(menupermisos, new frmPermisosSimples(usuarioActual.IdUsuario));
+        }
 
+        private void submenugruposdepermisos_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(menupermisos, new frmGruposPermisos());
+        }
     }
 }

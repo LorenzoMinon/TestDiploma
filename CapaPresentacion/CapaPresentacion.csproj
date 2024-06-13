@@ -166,17 +166,23 @@
     <Compile Include="frmDetalleVenta.Designer.cs">
       <DependentUpon>frmDetalleVenta.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmGruposPermisos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGruposPermisos.Designer.cs">
+      <DependentUpon>frmGruposPermisos.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmNegocio.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmNegocio.Designer.cs">
       <DependentUpon>frmNegocio.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmGestionPermisos.cs">
+    <Compile Include="frmPermisosSimples.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmGestionPermisos.Designer.cs">
-      <DependentUpon>frmGestionPermisos.cs</DependentUpon>
+    <Compile Include="frmPermisosSimples.Designer.cs">
+      <DependentUpon>frmPermisosSimples.cs</DependentUpon>
     </Compile>
     <Compile Include="frmProducto.cs">
       <SubType>Form</SubType>
@@ -232,6 +238,12 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modales\mdAgregarGrupoPermiso.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modales\mdAgregarGrupoPermiso.Designer.cs">
+      <DependentUpon>mdAgregarGrupoPermiso.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modales\mdAsignarPermisos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -243,6 +255,12 @@
     </Compile>
     <Compile Include="Modales\mdCliente.Designer.cs">
       <DependentUpon>mdCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\mdEditarGrupoPermiso.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modales\mdEditarGrupoPermiso.Designer.cs">
+      <DependentUpon>mdEditarGrupoPermiso.cs</DependentUpon>
     </Compile>
     <Compile Include="Modales\mdProducto.cs">
       <SubType>Form</SubType>
@@ -274,11 +292,14 @@
     <EmbeddedResource Include="frmDetalleVenta.resx">
       <DependentUpon>frmDetalleVenta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmGestionPermisos.resx">
-      <DependentUpon>frmGestionPermisos.cs</DependentUpon>
+    <EmbeddedResource Include="frmGruposPermisos.resx">
+      <DependentUpon>frmGruposPermisos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNegocio.resx">
       <DependentUpon>frmNegocio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPermisosSimples.resx">
+      <DependentUpon>frmPermisosSimples.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProducto.resx">
       <DependentUpon>frmProducto.cs</DependentUpon>
@@ -307,11 +328,17 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Modales\mdAgregarGrupoPermiso.resx">
+      <DependentUpon>mdAgregarGrupoPermiso.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Modales\mdAsignarPermisos.resx">
       <DependentUpon>mdAsignarPermisos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modales\mdCliente.resx">
       <DependentUpon>mdCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modales\mdEditarGrupoPermiso.resx">
+      <DependentUpon>mdEditarGrupoPermiso.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Modales\mdProducto.resx">
       <DependentUpon>mdProducto.cs</DependentUpon>

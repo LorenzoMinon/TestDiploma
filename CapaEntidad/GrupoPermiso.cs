@@ -9,7 +9,7 @@ namespace CapaEntidad
     public class GrupoPermiso
     {
         public int IdGrupoPermiso { get; set; }
-        public string NombreGrupoPermiso { get; set; }
+        public string Nombre { get; set; }
+        public bool Asignado { get; set; }
     }
-
 }
