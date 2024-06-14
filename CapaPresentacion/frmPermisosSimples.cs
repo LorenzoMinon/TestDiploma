@@ -1,58 +1,98 @@
-﻿using CapaNegocio;
+﻿using CapaEntidad;
+using CapaNegocio;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CapaPresentacion
 {
     public partial class frmPermisosSimples : Form
     {
+        private CN_Usuario usuarioService = new CN_Usuario();
         private CN_Permiso permisoService = new CN_Permiso();
-        private int idUsuario;
+        private int idUsuarioSeleccionado;
 
-        public frmPermisosSimples(int idUsuario)
+        public frmPermisosSimples()
         {
             InitializeComponent();
-            this.idUsuario = idUsuario;
         }
 
         private void frmPermisosSimples_Load(object sender, EventArgs e)
         {
-            CargarPermisos();
+            var usuarios = usuarioService.Listar();
+            cbUsuarios.DataSource = usuarios;
+            cbUsuarios.DisplayMember = "NombreCompleto";
+            cbUsuarios.ValueMember = "IdUsuario";
+        }
+
+        private void cbUsuarios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbUsuarios.SelectedValue is int idUsuario)
+            {
+                idUsuarioSeleccionado = idUsuario;
+                CargarPermisos();
+            }
         }
 
         private void CargarPermisos()
         {
-            var permisos = permisoService.ListarPermisosConEstado(idUsuario);
-            dgvPermisos.DataSource = permisos;
-            dgvPermisos.Columns["IdPermiso"].Visible = false;
-            dgvPermisos.Columns["Nombre"].ReadOnly = true;
+            var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
+            var gruposPermisos = permisoService.ListarGruposPermisosConEstado(idUsuarioSeleccionado);
+
+            dgvPermisos.Rows.Clear();
+
+            foreach (var permiso in permisosSimples)
+            {
+                dgvPermisos.Rows.Add(permiso.Asignado, "Permiso", permiso.Nombre);
+            }
+
+            foreach (var grupo in gruposPermisos)
+            {
+                dgvPermisos.Rows.Add(grupo.Asignado, "Grupo", grupo.Nombre);
+            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in dgvPermisos.Rows)
             {
-                if (row.Cells["Nombre"].Value != null && row.Cells["Asignado"].Value != null)
+                if (row.Cells["colAsignado"].Value != null && row.Cells["colNombrePermiso"].Value != null)
                 {
-                    string nombrePermiso = row.Cells["Nombre"].Value.ToString();
-                    bool asignado = Convert.ToBoolean(row.Cells["Asignado"].Value);
+                    bool asignado = Convert.ToBoolean(row.Cells["colAsignado"].Value);
+                    string tipoPermiso = row.Cells["colTipoPermiso"].Value.ToString();
+                    string nombrePermiso = row.Cells["colNombrePermiso"].Value.ToString();
 
-                    var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
-
-                    if (asignado)
+                    if (tipoPermiso == "Permiso")
                     {
-                        permisoService.AsignarPermisoAUsuario(idUsuario, permiso.IdPermiso);
+                        var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
+
+                        if (asignado)
+                        {
+                            permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.IdPermiso);
+                        }
+                        else
+                        {
+                            permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.IdPermiso);
+                        }
                     }
-                    else
+                    else if (tipoPermiso == "Grupo")
                     {
-                        permisoService.RevocarPermisoDeUsuario(idUsuario, permiso.IdPermiso);
+                        var grupoPermiso = permisoService.ObtenerGrupoPermisoPorNombre(nombrePermiso);
+
+                        if (asignado)
+                        {
+                            permisoService.AsignarGrupoPermisoAUsuario(idUsuarioSeleccionado, grupoPermiso.IdGrupoPermiso);
+                        }
+                        else
+                        {
+                            permisoService.RevocarGrupoPermisoDeUsuario(idUsuarioSeleccionado, grupoPermiso.IdGrupoPermiso);
+                        }
                     }
                 }
             }
 
             MessageBox.Show("Permisos actualizados correctamente.");
-            this.Close();
         }
     }
 }

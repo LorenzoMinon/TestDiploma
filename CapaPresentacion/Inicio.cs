@@ -154,7 +154,7 @@ namespace CapaPresentacion
 
         private void submenupermisossimples_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(menupermisos, new frmPermisosSimples(usuarioActual.IdUsuario));
+            AbrirFormulario(menupermisos, new frmPermisosSimples());
         }
 
         private void submenugruposdepermisos_Click(object sender, EventArgs e)
