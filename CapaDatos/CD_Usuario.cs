@@ -182,6 +182,47 @@ namespace CapaDatos
 
             return respuesta;
         }
+        public Usuario ObtenerUsuarioPorCorreo(string correo)
+        {
+            Usuario usuario = null;
+            using (SqlConnection conn = new SqlConnection(Conexion.cadena))
+            {
+                string query = "SELECT * FROM usuarios WHERE Correo = @Correo";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Correo", correo);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        usuario = new Usuario
+                        {
+                            IdUsuario = (int)reader["IdUsuario"],
+                            Documento = (string)reader["Documento"],
+                            NombreCompleto = (string)reader["NombreCompleto"],
+                            Correo = (string)reader["Correo"],
+                            Clave = (string)reader["Clave"],
+                            Estado = (bool)reader["Estado"]
+                        };
+                    }
+                }
+            }
+            return usuario;
+        }
+
+        public bool ActualizarClave(int idUsuario, string nuevaClave)
+        {
+            using (SqlConnection conn = new SqlConnection(Conexion.cadena))
+            {
+                string query = "UPDATE usuarios SET Clave = @Clave WHERE IdUsuario = @IdUsuario";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Clave", nuevaClave);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                int result = cmd.ExecuteNonQuery();
+                return result > 0;
+            }
+        }
 
 
     }

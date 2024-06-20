@@ -344,7 +344,6 @@
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "Usuario: ";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // lblusuario
             // 

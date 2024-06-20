@@ -10,34 +10,6 @@ namespace CapaNegocio
     {
         private string connectionString = Conexion.cadena;
 
-        public List<Permiso> ListarPermisosConEstado(int idUsuario)
-        {
-            List<Permiso> permisos = new List<Permiso>();
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = @"
-                SELECT p.IdPermiso, p.Nombre, 
-                       CASE WHEN up.IdPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
-                FROM Permisos p
-                LEFT JOIN UsuariosPermisos up ON p.IdPermiso = up.IdPermiso AND up.IdUsuario = @IdUsuario";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        permisos.Add(new Permiso
-                        {
-                            IdPermiso = (int)reader["IdPermiso"],
-                            Nombre = (string)reader["Nombre"],
-                            Asignado = (bool)reader["Asignado"]
-                        });
-                    }
-                }
-            }
-            return permisos;
-        }
 
         public Permiso ObtenerPermisoPorNombre(string nombre)
         {
@@ -88,39 +60,6 @@ namespace CapaNegocio
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
-        }
-
-        public List<GrupoPermiso> ListarGruposPermisosConEstado(int idUsuario)
-        {
-            List<GrupoPermiso> grupos = new List<GrupoPermiso>();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string query = @"
-            SELECT gp.IdGrupoPermiso, gp.NombreGrupoPermiso AS Nombre, 
-                   CASE WHEN ugp.IdGrupoPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
-            FROM GruposPermisos gp
-            LEFT JOIN UsuariosGruposPermisos ugp ON gp.IdGrupoPermiso = ugp.IdGrupoPermiso AND ugp.IdUsuario = @IdUsuario";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        grupos.Add(new GrupoPermiso
-                        {
-                            IdGrupoPermiso = Convert.ToInt32(reader["IdGrupoPermiso"]),
-                            Nombre = reader["Nombre"].ToString(),
-                            Asignado = Convert.ToBoolean(reader["Asignado"])
-                        });
-                    }
-                }
-            }
-
-            return grupos;
         }
 
 
@@ -216,6 +155,93 @@ namespace CapaNegocio
 
 
         // ULTIMOS UPDATES:
+
+        public List<Permiso> ListarPermisosConEstado(int idUsuario)
+        {
+            List<Permiso> permisos = new List<Permiso>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"
+                SELECT p.IdPermiso, p.Nombre, 
+                       CASE WHEN up.IdPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
+                FROM Permisos p
+                LEFT JOIN UsuariosPermisos up ON p.IdPermiso = up.IdPermiso AND up.IdUsuario = @IdUsuario";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        permisos.Add(new Permiso
+                        {
+                            IdPermiso = (int)reader["IdPermiso"],
+                            Nombre = (string)reader["Nombre"],
+                            Asignado = (bool)reader["Asignado"]
+                        });
+                    }
+                }
+            }
+            return permisos;
+        }
+
+        public List<Permiso> ListarPermisosPorGrupo(int idGrupoPermiso)
+        {
+            List<Permiso> permisos = new List<Permiso>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"
+                SELECT p.IdPermiso, p.Nombre, 
+                       CASE WHEN gpd.IdPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
+                FROM Permisos p
+                LEFT JOIN GruposPermisosDetalles gpd ON p.IdPermiso = gpd.IdPermiso AND gpd.IdGrupoPermiso = @IdGrupoPermiso";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        permisos.Add(new Permiso
+                        {
+                            IdPermiso = (int)reader["IdPermiso"],
+                            Nombre = (string)reader["Nombre"],
+                            Asignado = (bool)reader["Asignado"]
+                        });
+                    }
+                }
+            }
+            return permisos;
+        }
+
+        public List<GrupoPermiso> ListarGruposPermisosConEstado(int idUsuario)
+        {
+            List<GrupoPermiso> grupos = new List<GrupoPermiso>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"
+                SELECT gp.IdGrupoPermiso, gp.NombreGrupoPermiso AS Nombre, 
+                       CASE WHEN ugp.IdGrupoPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
+                FROM GruposPermisos gp
+                LEFT JOIN UsuariosGruposPermisos ugp ON gp.IdGrupoPermiso = ugp.IdGrupoPermiso AND ugp.IdUsuario = @IdUsuario";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        grupos.Add(new GrupoPermiso
+                        {
+                            IdGrupoPermiso = (int)reader["IdGrupoPermiso"],
+                            Nombre = (string)reader["Nombre"],
+                            Asignado = (bool)reader["Asignado"]
+                        });
+                    }
+                }
+            }
+            return grupos;
+        }
         public List<Permiso> ListarPermisos()
         {
             List<Permiso> permisos = new List<Permiso>();

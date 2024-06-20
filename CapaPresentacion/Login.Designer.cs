@@ -37,6 +37,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btningresar = new FontAwesome.Sharp.IconButton();
             this.btncancelar = new FontAwesome.Sharp.IconButton();
+            this.btnRecuperarClave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.iconPictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,7 +48,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 276);
+            this.label1.Size = new System.Drawing.Size(259, 316);
             this.label1.TabIndex = 0;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
@@ -92,6 +93,7 @@
             this.txtclave.Size = new System.Drawing.Size(192, 20);
             this.txtclave.TabIndex = 4;
             this.txtclave.TextChanged += new System.EventHandler(this.txtclave_TextChanged);
+            this.txtclave.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtclave_KeyPress);
             // 
             // label3
             // 
@@ -150,11 +152,23 @@
             this.btncancelar.UseVisualStyleBackColor = false;
             this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
             // 
+            // btnRecuperarClave
+            // 
+            this.btnRecuperarClave.BackColor = System.Drawing.SystemColors.Control;
+            this.btnRecuperarClave.Location = new System.Drawing.Point(363, 249);
+            this.btnRecuperarClave.Name = "btnRecuperarClave";
+            this.btnRecuperarClave.Size = new System.Drawing.Size(88, 34);
+            this.btnRecuperarClave.TabIndex = 9;
+            this.btnRecuperarClave.Text = "Recuperar clave";
+            this.btnRecuperarClave.UseVisualStyleBackColor = false;
+            this.btnRecuperarClave.Click += new System.EventHandler(this.btnRecuperarClave_Click);
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(583, 276);
+            this.ClientSize = new System.Drawing.Size(544, 316);
+            this.Controls.Add(this.btnRecuperarClave);
             this.Controls.Add(this.btncancelar);
             this.Controls.Add(this.btningresar);
             this.Controls.Add(this.label4);
@@ -186,5 +200,6 @@
         private System.Windows.Forms.Label label4;
         private FontAwesome.Sharp.IconButton btningresar;
         private FontAwesome.Sharp.IconButton btncancelar;
+        private System.Windows.Forms.Button btnRecuperarClave;
     }
 }

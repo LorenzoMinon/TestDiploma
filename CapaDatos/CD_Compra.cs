@@ -37,18 +37,21 @@ namespace CapaDatos
             return idcorrelativo;
         }
 
-
-        public bool Registrar(Compra obj, DataTable DetalleCompra, out string Mensaje) {
+        public bool Registrar(Compra obj, DataTable DetalleCompra, out string Mensaje)
+        {
             bool Respuesta = false;
             Mensaje = string.Empty;
 
-
             using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
             {
+                SqlTransaction transaction = null;
 
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_RegistrarCompra", oconexion);
+                    oconexion.Open();
+                    transaction = oconexion.BeginTransaction();
+
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarCompra", oconexion, transaction);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("IdProveedor", obj.oProveedor.IdProveedor);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
@@ -59,22 +62,33 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
-
                     cmd.ExecuteNonQuery();
 
                     Respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
                     Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
 
+                    if (Respuesta)
+                    {
+                        // Registrar la transacción en el plan de cuentas
+
+                        transaction.Commit();
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                    }
                 }
                 catch (Exception ex)
                 {
+                    if (transaction != null) transaction.Rollback();
                     Respuesta = false;
                     Mensaje = ex.Message;
                 }
             }
             return Respuesta;
         }
+
+
         public Compra ObtenerCompra(string numero)
         {
             Compra obj = new Compra();

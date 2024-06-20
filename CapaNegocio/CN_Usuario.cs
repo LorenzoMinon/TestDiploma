@@ -13,6 +13,8 @@ namespace CapaNegocio
     {
         //Nuevo
         private string connectionString = Conexion.cadena;
+        private CD_Usuario cdUsuario = new CD_Usuario();
+
 
         public Usuario ObtenerUsuarioPorDocumento(string Documento)
         {
@@ -128,5 +130,15 @@ namespace CapaNegocio
             return objcd_usuario.Eliminar(obj, out Mensaje);
         }
 
+
+        public Usuario ObtenerUsuarioPorCorreo(string correo)
+        {
+            return cdUsuario.ObtenerUsuarioPorCorreo(correo);
+        }
+
+        public bool ActualizarClave(int idUsuario, string nuevaClave)
+        {
+            return cdUsuario.ActualizarClave(idUsuario, nuevaClave);
+        }
     }
 }

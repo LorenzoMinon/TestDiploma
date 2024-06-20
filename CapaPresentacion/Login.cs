@@ -53,8 +53,7 @@ namespace CapaPresentacion
             Usuario usuario = userService.ObtenerUsuarioPorDocumento(documento);
             if (usuario != null && usuario.Clave == clave)
             {
-                MessageBox.Show("¡Inicio de sesión exitoso!");
-                // Redirigir al usuario a la pantalla principal
+
                     Inicio form = new Inicio(usuario);
 
                     form.Show();
@@ -96,6 +95,20 @@ namespace CapaPresentacion
         private void Login_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtclave_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btningresar_Click(sender, e);
+            }
+        }
+
+        private void btnRecuperarClave_Click(object sender, EventArgs e)
+        {
+            frmRecuperarClave recuperarClaveForm = new frmRecuperarClave();
+            recuperarClaveForm.Show();
         }
     }
 }
