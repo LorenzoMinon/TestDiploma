@@ -16,7 +16,7 @@ namespace CapaDatos
         {
             List<Proveedor> lista = new List<Proveedor>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
@@ -24,10 +24,10 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select IdProveedor,Documento,RazonSocial,Correo,Telefono,Estado from PROVEEDOR");
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -71,9 +71,9 @@ namespace CapaDatos
             Mensaje = string.Empty;
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("SP_RegistrarProveedor", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarProveedor", conexion);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
@@ -83,7 +83,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -112,10 +112,10 @@ namespace CapaDatos
             Mensaje = string.Empty;
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_ModificarProveedor", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_ModificarProveedor", conexion);
                     cmd.Parameters.AddWithValue("IdProveedor", obj.IdProveedor);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
@@ -126,7 +126,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -157,17 +157,17 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
 
-                    SqlCommand cmd = new SqlCommand("SP_EliminarProveedor", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_EliminarProveedor", conexion);
                     cmd.Parameters.AddWithValue("IdProveedor", obj.IdProveedor);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 

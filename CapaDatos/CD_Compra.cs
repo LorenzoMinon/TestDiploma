@@ -14,17 +14,17 @@ namespace CapaDatos
         public int ObtenerCorrelativo() {
             int idcorrelativo = 0;
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
                 {
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select count(*) + 1 from COMPRA");
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     idcorrelativo = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -42,16 +42,16 @@ namespace CapaDatos
             bool Respuesta = false;
             Mensaje = string.Empty;
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 SqlTransaction transaction = null;
 
                 try
                 {
-                    oconexion.Open();
-                    transaction = oconexion.BeginTransaction();
+                    conexion.Open();
+                    transaction = conexion.BeginTransaction();
 
-                    SqlCommand cmd = new SqlCommand("sp_RegistrarCompra", oconexion, transaction);
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarCompra", conexion, transaction);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("IdProveedor", obj.oProveedor.IdProveedor);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
@@ -92,7 +92,7 @@ namespace CapaDatos
         public Compra ObtenerCompra(string numero)
         {
             Compra obj = new Compra();
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
@@ -109,11 +109,11 @@ namespace CapaDatos
                     query.AppendLine("where c.NumeroDocumento = @numero");
 
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@numero", numero);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -151,7 +151,7 @@ namespace CapaDatos
             List<Detalle_Compra> oLista = new List<Detalle_Compra>();
             try
             {
-                using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
                     conexion.Open();
 

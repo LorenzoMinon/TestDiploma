@@ -16,7 +16,7 @@ namespace CapaDatos
         {
             List<Cliente> lista = new List<Cliente>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
@@ -25,10 +25,10 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select IdCliente,Documento,NombreCompleto,Correo,Telefono,Estado from CLIENTE");
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -75,10 +75,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_RegistrarCliente", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarCliente", conexion);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
@@ -88,7 +88,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -120,10 +120,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_ModificarCliente", oconexion); //PARAMETROS DE ENTRADA
+                    SqlCommand cmd = new SqlCommand("SP_ModificarCliente", conexion); //PARAMETROS DE ENTRADA
                     cmd.Parameters.AddWithValue("IdCliente", obj.IdCliente);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
@@ -134,7 +134,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -162,13 +162,13 @@ namespace CapaDatos
             Mensaje = string.Empty;
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("delete from cliente where IdCliente = @id", oconexion);
+                    SqlCommand cmd = new SqlCommand("delete from cliente where IdCliente = @id", conexion);
                     cmd.Parameters.AddWithValue("@id", obj.IdCliente);
                     cmd.CommandType = CommandType.Text;
-                    oconexion.Open();
+                    conexion.Open();
                     respuesta = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
 

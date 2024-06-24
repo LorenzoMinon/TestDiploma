@@ -15,18 +15,18 @@ namespace CapaDatos
         {
             List<ReporteCompra> lista = new List<ReporteCompra>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    SqlCommand cmd = new SqlCommand("SP_ReporteCompras", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_ReporteCompras", conexion);
                     cmd.Parameters.AddWithValue("fechainicio", fechainicio);
                     cmd.Parameters.AddWithValue("fechafin", fechafin);
                     cmd.Parameters.AddWithValue("idproveedor", idproveedor);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -68,17 +68,17 @@ namespace CapaDatos
         {
             List<ReporteVenta> lista = new List<ReporteVenta>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    SqlCommand cmd = new SqlCommand("SP_ReporteVentas", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_ReporteVentas", conexion);
                     cmd.Parameters.AddWithValue("fechainicio", fechainicio);
                     cmd.Parameters.AddWithValue("fechafin", fechafin);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {

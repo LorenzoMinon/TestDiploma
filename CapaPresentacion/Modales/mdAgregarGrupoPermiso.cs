@@ -52,7 +52,7 @@ namespace CapaPresentacion.Modales
                 {
                     string nombrePermiso = row.Cells["colNombre"].Value.ToString();
                     var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
-                    permisoService.AsignarPermisoAGrupo(idGrupoPermiso, permiso.IdPermiso);
+                    permisoService.AsignarPermisoAGrupo(idGrupoPermiso, permiso.Id);
                 }
             }
 

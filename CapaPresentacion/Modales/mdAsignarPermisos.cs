@@ -45,11 +45,11 @@ namespace CapaPresentacion.Modales
 
                     if (asignado)
                     {
-                        permisoService.AsignarPermisoAUsuario(idUsuario, permiso.IdPermiso);
+                        permisoService.AsignarPermisoAUsuario(idUsuario, permiso.Id);
                     }
                     else
                     {
-                        permisoService.RevocarPermisoDeUsuario(idUsuario, permiso.IdPermiso);
+                        permisoService.RevocarPermisoDeUsuario(idUsuario, permiso.Id);
                     }
                 }
             }

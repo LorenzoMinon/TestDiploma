@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CapaEntidad
 {
-    public class GrupoPermiso
+    public class GrupoPermiso : IPermiso
     {
-        public int IdGrupoPermiso { get; set; }
+        public int Id { get; set; }
         public string Nombre { get; set; }
         public bool Asignado { get; set; }
+        public List<IPermiso> Permisos { get; set; } = new List<IPermiso>();
     }
 }

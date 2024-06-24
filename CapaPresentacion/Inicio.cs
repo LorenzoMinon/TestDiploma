@@ -34,11 +34,11 @@ namespace CapaPresentacion
         private void AplicarPermisos()
         {
             var permisoService = new CN_Permiso();
-            List<Permiso> listaPermisos = permisoService.ListarPermisosConEstado(usuarioActual.IdUsuario);
+            List<PermisoSimple> listaPermisos = permisoService.ListarPermisosConEstado(usuarioActual.IdUsuario);
             List<GrupoPermiso> listaGruposPermisos = permisoService.ListarGruposPermisosConEstado(usuarioActual.IdUsuario);
 
             // Lista para almacenar todos los permisos
-            List<Permiso> permisosCompletos = new List<Permiso>();
+            List<IPermiso> permisosCompletos = new List<IPermiso>();
 
             // Agregar permisos individuales
             permisosCompletos.AddRange(listaPermisos.Where(p => p.Asignado));
@@ -46,7 +46,7 @@ namespace CapaPresentacion
             // Agregar permisos de los grupos
             foreach (var grupo in listaGruposPermisos.Where(g => g.Asignado))
             {
-                var permisosGrupo = permisoService.ListarPermisosPorGrupo(grupo.IdGrupoPermiso);
+                var permisosGrupo = permisoService.ListarPermisosConEstadoParaGrupo(grupo.Id);
                 permisosCompletos.AddRange(permisosGrupo.Where(p => p.Asignado));
             }
 
@@ -54,7 +54,7 @@ namespace CapaPresentacion
             RecorrerMenuItems(menu.Items, permisosCompletos);
         }
 
-        private void RecorrerMenuItems(ToolStripItemCollection menuItems, List<Permiso> permisosCompletos)
+        private void RecorrerMenuItems(ToolStripItemCollection menuItems, List<IPermiso> permisosCompletos)
         {
             foreach (ToolStripMenuItem menuItem in menuItems)
             {

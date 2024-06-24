@@ -16,17 +16,17 @@ namespace CapaDatos
         {
             int idcorrelativo = 0;
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
                 {
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select count(*) + 1 from VENTA");
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     idcorrelativo = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -43,18 +43,18 @@ namespace CapaDatos
         {
             bool respuesta = true;
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("update producto set stock = stock - @cantidad where idproducto = @idproducto");
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@cantidad", cantidad);
                     cmd.Parameters.AddWithValue("@idproducto", idproducto);
                     cmd.CommandType = CommandType.Text;
-                    oconexion.Open();
+                    conexion.Open();
 
                     respuesta = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
@@ -72,17 +72,17 @@ namespace CapaDatos
         {
             bool respuesta = true;
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("update producto set stock = stock + @cantidad where idproducto = @idproducto");
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@cantidad", cantidad);
                     cmd.Parameters.AddWithValue("@idproducto", idproducto);
                     cmd.CommandType = CommandType.Text;
-                    oconexion.Open();
+                    conexion.Open();
 
                     respuesta = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
@@ -103,9 +103,9 @@ namespace CapaDatos
             Mensaje = string.Empty;
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("usp_RegistrarVenta", oconexion);
+                    SqlCommand cmd = new SqlCommand("usp_RegistrarVenta", conexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
@@ -119,7 +119,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
                     cmd.ExecuteNonQuery();
 
                     Respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
@@ -142,7 +142,7 @@ namespace CapaDatos
 
             Venta obj = new Venta();
 
-            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
@@ -199,7 +199,7 @@ namespace CapaDatos
         {
             List<Detalle_Venta> oLista = new List<Detalle_Venta>();
 
-            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {

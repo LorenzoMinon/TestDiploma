@@ -26,7 +26,7 @@ namespace CapaPresentacion
             dgvGruposPermisos.Rows.Clear(); // Asegúrate de que no haya filas duplicadas
             foreach (var grupo in gruposPermisos)
             {
-                dgvGruposPermisos.Rows.Add(grupo.IdGrupoPermiso, grupo.Nombre, false);
+                dgvGruposPermisos.Rows.Add(grupo.Id, grupo.Nombre, false);
             }
         }
 

@@ -17,13 +17,13 @@ namespace CapaDatos
         {
             List<Usuario> lista = new List<Usuario>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
                     string query = "select IdUsuario, Documento, NombreCompleto, Correo, Clave, Estado from usuarios";
-                    SqlCommand cmd = new SqlCommand(query, oconexion);
-                    oconexion.Open();
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -64,10 +64,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_REGISTRARUSUARIO", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_REGISTRARUSUARIO", conexion);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
@@ -77,7 +77,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -109,10 +109,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_EDITARUSUARIO", oconexion); //PARAMETROS DE ENTRADA
+                    SqlCommand cmd = new SqlCommand("SP_EDITARUSUARIO", conexion); //PARAMETROS DE ENTRADA
                     cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
@@ -123,7 +123,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -154,17 +154,17 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
 
-                    SqlCommand cmd = new SqlCommand("SP_ELIMINARUSUARIO", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_ELIMINARUSUARIO", conexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
                     cmd.Parameters.Add("Respuesta", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -185,7 +185,7 @@ namespace CapaDatos
         public Usuario ObtenerUsuarioPorCorreo(string correo)
         {
             Usuario usuario = null;
-            using (SqlConnection conn = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conn = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 string query = "SELECT * FROM usuarios WHERE Correo = @Correo";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -212,7 +212,7 @@ namespace CapaDatos
 
         public bool ActualizarClave(int idUsuario, string nuevaClave)
         {
-            using (SqlConnection conn = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conn = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 string query = "UPDATE usuarios SET Clave = @Clave WHERE IdUsuario = @IdUsuario";
                 SqlCommand cmd = new SqlCommand(query, conn);

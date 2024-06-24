@@ -14,7 +14,7 @@ namespace CapaDatos
             bool respuesta = false;
             Mensaje = string.Empty;
 
-            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
@@ -47,7 +47,7 @@ namespace CapaDatos
         {
             List<Transaccion> lista = new List<Transaccion>();
 
-            using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {

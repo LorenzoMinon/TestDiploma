@@ -46,11 +46,11 @@ namespace CapaPresentacion.Modales
 
                     if (asignado)
                     {
-                        permisoService.AsignarPermisoAGrupo(IdGrupoPermiso, permiso.IdPermiso);
+                        permisoService.AsignarPermisoAGrupo(IdGrupoPermiso, permiso.Id);
                     }
                     else
                     {
-                        permisoService.RevocarPermisoDeGrupo(IdGrupoPermiso, permiso.IdPermiso);
+                        permisoService.RevocarPermisoDeGrupo(IdGrupoPermiso, permiso.Id);
                     }
                 }
             }

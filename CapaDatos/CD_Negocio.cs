@@ -17,7 +17,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
                     conexion.Open();
 
@@ -56,7 +56,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
                     conexion.Open();
                     //Consulta a manera de texto
@@ -95,7 +95,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
                     conexion.Open();
 
@@ -129,7 +129,7 @@ namespace CapaDatos
 
             try
             {
-                using (SqlConnection conexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
                     conexion.Open();
 

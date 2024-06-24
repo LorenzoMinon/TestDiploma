@@ -1,9 +1,8 @@
-﻿using CapaEntidad;
-using CapaNegocio;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using CapaEntidad;
+using CapaNegocio;
 
 namespace CapaPresentacion
 {
@@ -32,24 +31,73 @@ namespace CapaPresentacion
             {
                 idUsuarioSeleccionado = idUsuario;
                 CargarPermisos();
+                CargarGruposPermisos();
             }
         }
 
         private void CargarPermisos()
         {
             var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
-            var gruposPermisos = permisoService.ListarGruposPermisosConEstado(idUsuarioSeleccionado);
 
             dgvPermisos.Rows.Clear();
 
             foreach (var permiso in permisosSimples)
             {
-                dgvPermisos.Rows.Add(permiso.Asignado, "Permiso", permiso.Nombre);
+                dgvPermisos.Rows.Add(permiso.Asignado, permiso.Nombre);
             }
+        }
+
+        private void CargarGruposPermisos()
+        {
+            var gruposPermisos = permisoService.ListarGruposPermisosConEstado(idUsuarioSeleccionado);
+
+            dgvGruposPermisos.Rows.Clear();
 
             foreach (var grupo in gruposPermisos)
             {
-                dgvPermisos.Rows.Add(grupo.Asignado, "Grupo", grupo.Nombre);
+                dgvGruposPermisos.Rows.Add(grupo.Asignado, grupo.Nombre);
+            }
+        }
+
+        private void dgvPermisos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvPermisos.Columns["colAsignadoPermiso"] != null &&
+                e.ColumnIndex == dgvPermisos.Columns["colAsignadoPermiso"].Index && e.RowIndex >= 0)
+            {
+                bool asignado = Convert.ToBoolean(dgvPermisos.Rows[e.RowIndex].Cells["colAsignadoPermiso"].Value);
+                string nombrePermiso = dgvPermisos.Rows[e.RowIndex].Cells["colNombrePermiso"].Value.ToString();
+
+                var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
+
+                if (asignado)
+                {
+                    permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.Id);
+                }
+                else
+                {
+                    permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.Id);
+                }
+            }
+        }
+
+        private void dgvGruposPermisos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvGruposPermisos.Columns["colAsignadoGrupoPermiso"] != null &&
+                e.ColumnIndex == dgvGruposPermisos.Columns["colAsignadoGrupoPermiso"].Index && e.RowIndex >= 0)
+            {
+                bool asignado = Convert.ToBoolean(dgvGruposPermisos.Rows[e.RowIndex].Cells["colAsignadoGrupoPermiso"].Value);
+                string nombreGrupoPermiso = dgvGruposPermisos.Rows[e.RowIndex].Cells["colNombreGrupoPermiso"].Value.ToString();
+
+                var grupoPermiso = permisoService.ObtenerGrupoPermisoPorNombre(nombreGrupoPermiso);
+
+                if (asignado)
+                {
+                    permisoService.AsignarGrupoPermisoAUsuario(idUsuarioSeleccionado, grupoPermiso.Id);
+                }
+                else
+                {
+                    permisoService.RevocarGrupoPermisoDeUsuario(idUsuarioSeleccionado, grupoPermiso.Id);
+                }
             }
         }
 
@@ -57,37 +105,40 @@ namespace CapaPresentacion
         {
             foreach (DataGridViewRow row in dgvPermisos.Rows)
             {
-                if (row.Cells["colAsignado"].Value != null && row.Cells["colNombrePermiso"].Value != null)
+                if (row.Cells["colAsignadoPermiso"].Value != null && row.Cells["colNombrePermiso"].Value != null)
                 {
-                    bool asignado = Convert.ToBoolean(row.Cells["colAsignado"].Value);
-                    string tipoPermiso = row.Cells["colTipoPermiso"].Value.ToString();
+                    bool asignado = Convert.ToBoolean(row.Cells["colAsignadoPermiso"].Value);
                     string nombrePermiso = row.Cells["colNombrePermiso"].Value.ToString();
 
-                    if (tipoPermiso == "Permiso")
-                    {
-                        var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
+                    var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
 
-                        if (asignado)
-                        {
-                            permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.IdPermiso);
-                        }
-                        else
-                        {
-                            permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.IdPermiso);
-                        }
+                    if (asignado)
+                    {
+                        permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.Id);
                     }
-                    else if (tipoPermiso == "Grupo")
+                    else
                     {
-                        var grupoPermiso = permisoService.ObtenerGrupoPermisoPorNombre(nombrePermiso);
+                        permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.Id);
+                    }
+                }
+            }
 
-                        if (asignado)
-                        {
-                            permisoService.AsignarGrupoPermisoAUsuario(idUsuarioSeleccionado, grupoPermiso.IdGrupoPermiso);
-                        }
-                        else
-                        {
-                            permisoService.RevocarGrupoPermisoDeUsuario(idUsuarioSeleccionado, grupoPermiso.IdGrupoPermiso);
-                        }
+            foreach (DataGridViewRow row in dgvGruposPermisos.Rows)
+            {
+                if (row.Cells["colAsignadoGrupoPermiso"].Value != null && row.Cells["colNombreGrupoPermiso"].Value != null)
+                {
+                    bool asignado = Convert.ToBoolean(row.Cells["colAsignadoGrupoPermiso"].Value);
+                    string nombreGrupoPermiso = row.Cells["colNombreGrupoPermiso"].Value.ToString();
+
+                    var grupoPermiso = permisoService.ObtenerGrupoPermisoPorNombre(nombreGrupoPermiso);
+
+                    if (asignado)
+                    {
+                        permisoService.AsignarGrupoPermisoAUsuario(idUsuarioSeleccionado, grupoPermiso.Id);
+                    }
+                    else
+                    {
+                        permisoService.RevocarGrupoPermisoDeUsuario(idUsuarioSeleccionado, grupoPermiso.Id);
                     }
                 }
             }

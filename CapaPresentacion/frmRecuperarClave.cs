@@ -50,15 +50,15 @@ namespace CapaPresentacion
             try
             {
                 MailMessage mail = new MailMessage();
-                SmtpClient smtpServer = new SmtpClient("smtp.office365.com");
+                SmtpClient smtpServer = new SmtpClient("smtp-relay.brevo.com");
 
-                mail.From = new MailAddress("lorenzosistemasys@outlook.com");
+                mail.From = new MailAddress("770f9c001@smtp-brevo.com");
                 mail.To.Add(correo);
                 mail.Subject = "Recuperación de Contraseña";
                 mail.Body = $"Su nueva contraseña es: {nuevaClave}";
 
                 smtpServer.Port = 587; // Puerto para TLS
-                smtpServer.Credentials = new System.Net.NetworkCredential("lorenzosistemasys@outlook.com", "tu-contraseña");
+                smtpServer.Credentials = new System.Net.NetworkCredential("770f9c001@smtp-brevo.com", "WG2IN3sczMnSQphA");
                 smtpServer.EnableSsl = true;
 
                 smtpServer.Send(mail);
@@ -69,5 +69,9 @@ namespace CapaPresentacion
             }
         }
 
+        private void frmRecuperarClave_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

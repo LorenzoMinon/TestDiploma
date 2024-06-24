@@ -12,9 +12,15 @@ namespace CapaNegocio
     public class CN_Usuario
     {
         //Nuevo
-        private string connectionString = Conexion.cadena;
+        private string connectionString = Conexion.Instancia.Cadena;
         private CD_Usuario cdUsuario = new CD_Usuario();
 
+        private CD_Usuario _cdUsuario = new CD_Usuario();
+
+        public List<Usuario> Listar()
+        {
+            return _cdUsuario.Listar();
+        }
 
         public Usuario ObtenerUsuarioPorDocumento(string Documento)
         {
@@ -42,19 +48,19 @@ namespace CapaNegocio
             return usuario;
         }
 
-        public bool VerificarPermiso(string Documento, string nombrePermiso)
-        {
-            CN_Permiso permisoNegocio = new CN_Permiso();
-            List<Permiso> permisos = permisoNegocio.ObtenerPermisosPorDocumento(Documento);
-            return permisos.Any(p => p.Nombre == nombrePermiso);
-        }
+        //public bool VerificarPermiso(string Documento, string nombrePermiso)
+        //{
+        //    CN_Permiso permisoNegocio = new CN_Permiso();
+        //    List<Permiso> permisos = permisoNegocio.ObtenerPermisosPorDocumento(Documento);
+        //    return permisos.Any(p => p.Nombre == nombrePermiso);
+        //}
 
 
 
         private CD_Usuario objcd_usuario = new CD_Usuario();
 
 
-        public List<Usuario> Listar()
+        public List<Usuario> ListarUsuarios()
         {
             return objcd_usuario.Listar();
         }

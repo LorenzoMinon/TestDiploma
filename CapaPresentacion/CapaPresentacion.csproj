@@ -328,6 +328,9 @@
     <EmbeddedResource Include="frmProveedores.resx">
       <DependentUpon>frmProveedores.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmRecuperarClave.resx">
+      <DependentUpon>frmRecuperarClave.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmReporteCompras.resx">
       <DependentUpon>frmReporteCompras.cs</DependentUpon>
     </EmbeddedResource>

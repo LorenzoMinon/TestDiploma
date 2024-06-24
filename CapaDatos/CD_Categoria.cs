@@ -16,7 +16,7 @@ namespace CapaDatos
         {
             List<Categoria> lista = new List<Categoria>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
                 try
@@ -24,10 +24,10 @@ namespace CapaDatos
 
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select IdCategoria,Descripcion,Estado from Categoria");
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -71,17 +71,17 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_RegistrarCategoria", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarCategoria", conexion);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -113,10 +113,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_EditarCategoria", oconexion); //PARAMETROS DE ENTRADA
+                    SqlCommand cmd = new SqlCommand("SP_EditarCategoria", conexion); //PARAMETROS DE ENTRADA
                     cmd.Parameters.AddWithValue("IdCategoria", obj.IdCategoria);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
@@ -124,7 +124,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -155,17 +155,17 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
 
-                    SqlCommand cmd = new SqlCommand("SP_EliminarCategoria", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_EliminarCategoria", conexion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.IdCategoria);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 

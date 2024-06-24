@@ -16,7 +16,7 @@ namespace CapaDatos
         {
             List<Producto> lista = new List<Producto>();
 
-            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
 
 
@@ -28,10 +28,10 @@ namespace CapaDatos
                     query.AppendLine("inner join CATEGORIA c on c.IdCategoria = p.IdCategoria");
 
 
-                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -83,10 +83,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_RegistrarProducto", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_RegistrarProducto", conexion);
                     cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
@@ -96,7 +96,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -128,10 +128,10 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
-                    SqlCommand cmd = new SqlCommand("SP_ModificarProducto", oconexion); //PARAMETROS DE ENTRADA
+                    SqlCommand cmd = new SqlCommand("SP_ModificarProducto", conexion); //PARAMETROS DE ENTRADA
                     cmd.Parameters.AddWithValue("IdProducto", obj.IdProducto);
                     cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
@@ -142,7 +142,7 @@ namespace CapaDatos
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
@@ -173,17 +173,17 @@ namespace CapaDatos
             try
             {
 
-                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
                 {
 
 
-                    SqlCommand cmd = new SqlCommand("SP_EliminarProducto", oconexion);
+                    SqlCommand cmd = new SqlCommand("SP_EliminarProducto", conexion);
                     cmd.Parameters.AddWithValue("IdProducto", obj.IdProducto);
                     cmd.Parameters.Add("Respuesta", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    oconexion.Open();
+                    conexion.Open();
 
                     cmd.ExecuteNonQuery();
 
