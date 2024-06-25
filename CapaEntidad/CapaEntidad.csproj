@@ -48,7 +48,7 @@
     <Compile Include="Detalle_Compra.cs" />
     <Compile Include="Detalle_Venta.cs" />
     <Compile Include="GrupoPermiso.cs" />
-    <Compile Include="IPermiso.cs" />
+    <Compile Include="Interfaces\IPermiso.cs" />
     <Compile Include="Negocio.cs" />
     <Compile Include="PermisoSimple.cs" />
     <Compile Include="Producto.cs" />

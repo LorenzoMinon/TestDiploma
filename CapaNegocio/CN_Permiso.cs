@@ -1,96 +1,103 @@
 ﻿using System.Collections.Generic;
-using CapaEntidad;
 using CapaDatos;
+using CapaEntidad;
 
 namespace CapaNegocio
 {
     public class CN_Permiso
     {
-        private CD_Permiso _cdPermiso = new CD_Permiso();
+        private CD_Permiso cdPermiso = new CD_Permiso();
 
+        // Métodos existentes
         public List<PermisoSimple> ListarPermisosConEstado(int idUsuario)
         {
-            return _cdPermiso.ListarPermisosConEstado(idUsuario);
+            return cdPermiso.ListarPermisosConEstado(idUsuario);
         }
 
         public List<GrupoPermiso> ListarGruposPermisosConEstado(int idUsuario)
         {
-            return _cdPermiso.ListarGruposPermisosConEstado(idUsuario);
+            return cdPermiso.ListarGruposPermisosConEstado(idUsuario);
         }
 
         public PermisoSimple ObtenerPermisoPorNombre(string nombre)
         {
-            return _cdPermiso.ObtenerPermisoPorNombre(nombre);
+            return cdPermiso.ObtenerPermisoPorNombre(nombre);
         }
 
         public GrupoPermiso ObtenerGrupoPermisoPorNombre(string nombre)
         {
-            return _cdPermiso.ObtenerGrupoPermisoPorNombre(nombre);
+            return cdPermiso.ObtenerGrupoPermisoPorNombre(nombre);
         }
 
         public void AsignarPermisoAUsuario(int idUsuario, int idPermiso)
         {
-            _cdPermiso.AsignarPermisoAUsuario(idUsuario, idPermiso);
+            cdPermiso.AsignarPermisoAUsuario(idUsuario, idPermiso);
         }
 
         public void RevocarPermisoDeUsuario(int idUsuario, int idPermiso)
         {
-            _cdPermiso.RevocarPermisoDeUsuario(idUsuario, idPermiso);
+            cdPermiso.RevocarPermisoDeUsuario(idUsuario, idPermiso);
         }
 
         public void AsignarGrupoPermisoAUsuario(int idUsuario, int idGrupoPermiso)
         {
-            _cdPermiso.AsignarGrupoPermisoAUsuario(idUsuario, idGrupoPermiso);
+            cdPermiso.AsignarGrupoPermisoAUsuario(idUsuario, idGrupoPermiso);
         }
 
         public void RevocarGrupoPermisoDeUsuario(int idUsuario, int idGrupoPermiso)
         {
-            _cdPermiso.RevocarGrupoPermisoDeUsuario(idUsuario, idGrupoPermiso);
+            cdPermiso.RevocarGrupoPermisoDeUsuario(idUsuario, idGrupoPermiso);
         }
 
         public List<PermisoSimple> ListarPermisos()
         {
-            return _cdPermiso.ListarPermisos();
+            return cdPermiso.ListarPermisos();
         }
 
         public List<GrupoPermiso> ListarGruposPermisos()
         {
-            return _cdPermiso.ListarGruposPermisos();
+            return cdPermiso.ListarGruposPermisos();
         }
 
         public int AgregarGrupoPermiso(string nombre)
         {
-            return _cdPermiso.AgregarGrupoPermiso(nombre);
+            return cdPermiso.AgregarGrupoPermiso(nombre);
         }
 
         public void EditarGrupoPermiso(int idGrupoPermiso, string nuevoNombre)
         {
-            _cdPermiso.EditarGrupoPermiso(idGrupoPermiso, nuevoNombre);
+            cdPermiso.EditarGrupoPermiso(idGrupoPermiso, nuevoNombre);
         }
 
         public void EliminarGrupoPermiso(int idGrupoPermiso)
         {
-            _cdPermiso.EliminarGrupoPermiso(idGrupoPermiso);
+            cdPermiso.EliminarGrupoPermiso(idGrupoPermiso);
         }
 
         public GrupoPermiso ObtenerGrupoPermisoPorId(int idGrupoPermiso)
         {
-            return _cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
+            return cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
         }
 
         public List<PermisoSimple> ListarPermisosConEstadoParaGrupo(int idGrupoPermiso)
         {
-            return _cdPermiso.ListarPermisosConEstadoParaGrupo(idGrupoPermiso);
+            return cdPermiso.ListarPermisosConEstadoParaGrupo(idGrupoPermiso);
         }
 
         public void AsignarPermisoAGrupo(int idGrupoPermiso, int idPermiso)
         {
-            _cdPermiso.AsignarPermisoAGrupo(idGrupoPermiso, idPermiso);
+            cdPermiso.AsignarPermisoAGrupo(idGrupoPermiso, idPermiso);
         }
 
         public void RevocarPermisoDeGrupo(int idGrupoPermiso, int idPermiso)
         {
-            _cdPermiso.RevocarPermisoDeGrupo(idGrupoPermiso, idPermiso);
+            cdPermiso.RevocarPermisoDeGrupo(idGrupoPermiso, idPermiso);
+        }
+
+        // Métodos para el patrón Composite
+        public List<IPermiso> ObtenerTodosLosPermisos()
+        {
+            return cdPermiso.ObtenerTodosLosPermisos();
         }
     }
 }

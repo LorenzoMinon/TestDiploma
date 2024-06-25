@@ -7,7 +7,7 @@ namespace CapaDatos
 {
     public class CD_Permiso
     {
-        private string connectionString = Conexion.Instancia.Cadena; // Reemplaza con tu cadena de conexión
+        private string connectionString = Conexion.Instancia.Cadena;
 
         public List<PermisoSimple> ListarPermisosConEstado(int idUsuario)
         {
@@ -355,6 +355,49 @@ namespace CapaDatos
                 command.ExecuteNonQuery();
                 connection.Close();
             }
+        }
+
+        // Métodos para el patrón Composite
+
+        public List<IPermiso> ObtenerTodosLosPermisos()
+        {
+            List<IPermiso> permisos = new List<IPermiso>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT IdPermiso, Nombre FROM Permisos";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    permisos.Add(new PermisoSimple
+                    {
+                        Id = reader.GetInt32(0),
+                        Nombre = reader.GetString(1)
+                    });
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT IdGrupoPermiso, NombreGrupoPermiso FROM GruposPermisos";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    permisos.Add(new GrupoPermiso
+                    {
+                        Id = reader.GetInt32(0),
+                        Nombre = reader.GetString(1)
+                    });
+                }
+            }
+
+            return permisos;
         }
     }
 }

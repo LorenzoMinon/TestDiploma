@@ -43,7 +43,7 @@ namespace CapaPresentacion
 
             foreach (var permiso in permisosSimples)
             {
-                dgvPermisos.Rows.Add(permiso.Asignado, permiso.Nombre);
+                dgvPermisos.Rows.Add(permiso.Nombre, permiso.Asignado);
             }
         }
 
@@ -55,14 +55,13 @@ namespace CapaPresentacion
 
             foreach (var grupo in gruposPermisos)
             {
-                dgvGruposPermisos.Rows.Add(grupo.Asignado, grupo.Nombre);
+                dgvGruposPermisos.Rows.Add(grupo.Nombre, grupo.Asignado);
             }
         }
 
         private void dgvPermisos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvPermisos.Columns["colAsignadoPermiso"] != null &&
-                e.ColumnIndex == dgvPermisos.Columns["colAsignadoPermiso"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && dgvPermisos.Columns[e.ColumnIndex].Name == "colAsignadoPermiso")
             {
                 bool asignado = Convert.ToBoolean(dgvPermisos.Rows[e.RowIndex].Cells["colAsignadoPermiso"].Value);
                 string nombrePermiso = dgvPermisos.Rows[e.RowIndex].Cells["colNombrePermiso"].Value.ToString();
@@ -82,8 +81,7 @@ namespace CapaPresentacion
 
         private void dgvGruposPermisos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvGruposPermisos.Columns["colAsignadoGrupoPermiso"] != null &&
-                e.ColumnIndex == dgvGruposPermisos.Columns["colAsignadoGrupoPermiso"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && dgvGruposPermisos.Columns[e.ColumnIndex].Name == "colAsignadoGrupoPermiso")
             {
                 bool asignado = Convert.ToBoolean(dgvGruposPermisos.Rows[e.RowIndex].Cells["colAsignadoGrupoPermiso"].Value);
                 string nombreGrupoPermiso = dgvGruposPermisos.Rows[e.RowIndex].Cells["colNombreGrupoPermiso"].Value.ToString();
