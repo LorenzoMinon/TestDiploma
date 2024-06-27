@@ -1,142 +1,94 @@
-﻿using CapaEntidad;
-using CapaNegocio;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.tool.xml;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CapaNegocio;
+using CapaEntidad;
 
 namespace CapaPresentacion
 {
     public partial class frmDetalleCompra : Form
     {
-        public frmDetalleCompra()
+        private int IdOrden;
+        private Usuario usuarioActual;
+
+        public frmDetalleCompra(int idOrden, Usuario usuario)
         {
             InitializeComponent();
+            IdOrden = idOrden;
+            usuarioActual = usuario;
+            CargarDetallesOrdenCompra(IdOrden);
+
+            // Agregar el evento CellEndEdit
+            dgvDetalleCompra.CellEndEdit += new DataGridViewCellEventHandler(dgvDetalleCompra_CellEndEdit);
         }
 
-        private void frmDetalleCompra_Load(object sender, EventArgs e)
+        private void CargarDetallesOrdenCompra(int idOrden)
         {
+            Compra oCompra = new CN_Compra().ObtenerCompraPorId(idOrden);
+            if (oCompra != null)
+            {
+                txtTipoDocumento.Text = oCompra.TipoDocumento ?? string.Empty;
+                txtNumeroDocumento.Text = oCompra.NumeroDocumento ?? string.Empty;
+                txtFecha.Text = oCompra.FechaRegistro.ToString("dd/MM/yyyy");
+                txtUsuario.Text = oCompra.oUsuario?.NombreCompleto ?? string.Empty;
+                txtNumeroDocumentoProveedor.Text = oCompra.oProveedor?.Documento ?? string.Empty;
+                txtRazonSocial.Text = oCompra.oProveedor?.RazonSocial ?? string.Empty;
+                txtMontoTotal.Text = oCompra.MontoTotal.ToString("N2");
+                cboEstado.SelectedItem = oCompra.Estado ?? string.Empty;
 
-        }
-        private void btnbuscar_Click(object sender, EventArgs e)
-        {
-            Compra oCompra = new CN_Compra().ObtenerCompra(txtbusqueda.Text);
-
-            if (oCompra.IdCompra != 0) {
-
-                txtnumerodocumento.Text = oCompra.NumeroDocumento;
-                txttipodocumento.Text = oCompra.TipoDocumento;
-                txtusuario.Text = oCompra.oUsuario.NombreCompleto;
-                txtdocproveedor.Text = oCompra.oProveedor.Documento;
-                txtnombreproveedor.Text = oCompra.oProveedor.RazonSocial;
-                txtfecha.Text = oCompra.FechaRegistro;
-
-                dgvdata.Rows.Clear();
-                foreach (Detalle_Compra dc in oCompra.oDetalleCompra)
+                dgvDetalleCompra.Rows.Clear();
+                foreach (Detalle_Compra detalle in oCompra.oDetalleCompra ?? new List<Detalle_Compra>())
                 {
-                    dgvdata.Rows.Add(new object[] { dc.oProducto.Nombre, dc.PrecioCompra, dc.Cantidad, dc.MontoTotal });
-                }
-
-                txtmontototal.Text = oCompra.MontoTotal.ToString("0.00");
-            }
-
-        }
-        private void btnborrar_Click(object sender, EventArgs e)
-        {
-            txtfecha.Text = "";
-            txttipodocumento.Text = "";
-            txtusuario.Text = "";
-            txtdocproveedor.Text = "";
-            txtnombreproveedor.Text = "";
-
-            dgvdata.Rows.Clear();
-            txtmontototal.Text = "0.00";
-        }
-
-        private void btndescargar_Click(object sender, EventArgs e)
-        {
-            if (txttipodocumento.Text == "")
-            {
-                MessageBox.Show("No se encontraron resultados", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            string Texto_Html = Properties.Resources.PlantillaCompra.ToString();
-            Negocio odatos = new CN_Negocio().ObtenerDatos();
-
-            Texto_Html = Texto_Html.Replace("@nombrenegocio", odatos.Nombre.ToUpper());
-            Texto_Html = Texto_Html.Replace("@docnegocio", odatos.RUC);
-            Texto_Html = Texto_Html.Replace("@direcnegocio", odatos.Direccion);
-
-            Texto_Html = Texto_Html.Replace("@tipodocumento", txttipodocumento.Text.ToUpper());
-            Texto_Html = Texto_Html.Replace("@numerodocumento", txtnumerodocumento.Text);
-
-
-            Texto_Html = Texto_Html.Replace("@docproveedor", txtdocproveedor.Text);
-            Texto_Html = Texto_Html.Replace("@nombreproveedor", txtnombreproveedor.Text);
-            Texto_Html = Texto_Html.Replace("@fecharegistro", txtfecha.Text);
-            Texto_Html = Texto_Html.Replace("@usuarioregistro", txtusuario.Text);
-
-            string filas = string.Empty;
-            foreach (DataGridViewRow row in dgvdata.Rows)
-            {
-                filas += "<tr>";
-                filas += "<td>" + row.Cells["Producto"].Value.ToString() + "</td>";
-                filas += "<td>" + row.Cells["PrecioCompra"].Value.ToString() + "</td>";
-                filas += "<td>" + row.Cells["Cantidad"].Value.ToString() + "</td>";
-                filas += "<td>" + row.Cells["SubTotal"].Value.ToString() + "</td>";
-                filas += "</tr>";
-            }
-            Texto_Html = Texto_Html.Replace("@filas", filas);
-            Texto_Html = Texto_Html.Replace("@montototal", txtmontototal.Text);
-
-            SaveFileDialog savefile = new SaveFileDialog();
-            savefile.FileName = string.Format("Compra_{0}.pdf", txtnumerodocumento.Text);
-            savefile.Filter = "Pdf Files|*.pdf";
-
-            if (savefile.ShowDialog() == DialogResult.OK)
-            {
-                using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
-                {
-
-                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
-
-                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                    pdfDoc.Open();
-
-                    bool obtenido = true;
-                    byte[] byteImage = new CN_Negocio().ObtenerLogo(out obtenido);
-
-                    if (obtenido)
-                    {
-                        iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(byteImage);
-                        img.ScaleToFit(60, 60);
-                        img.Alignment = iTextSharp.text.Image.UNDERLYING;
-                        img.SetAbsolutePosition(pdfDoc.Left, pdfDoc.GetTop(51));
-                        pdfDoc.Add(img);
-                    }
-
-                    using (StringReader sr = new StringReader(Texto_Html))
-                    {
-                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-                    }
-
-                    pdfDoc.Close();
-                    stream.Close();
-                    MessageBox.Show("Documento Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    int index = dgvDetalleCompra.Rows.Add();
+                    dgvDetalleCompra.Rows[index].Cells["Producto"].Value = detalle.oProducto?.Nombre ?? string.Empty;
+                    dgvDetalleCompra.Rows[index].Cells["PrecioCompra"].Value = detalle.PrecioCompra;
+                    dgvDetalleCompra.Rows[index].Cells["Cantidad"].Value = detalle.Cantidad;
+                    dgvDetalleCompra.Rows[index].Cells["CantidadRecibida"].Value = detalle.CantidadRecibida;
+                    dgvDetalleCompra.Rows[index].Cells["SubTotal"].Value = detalle.MontoTotal;
                 }
             }
+            else
+            {
+                MessageBox.Show("No se pudo cargar la información de la compra.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        private void dgvDetalleCompra_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvDetalleCompra.Columns["CantidadRecibida"].Index)
+            {
+                // Obtener la cantidad recibida y actualizar el stock
+                int cantidadRecibida = Convert.ToInt32(dgvDetalleCompra.Rows[e.RowIndex].Cells["CantidadRecibida"].Value);
+                int idProducto = Convert.ToInt32(dgvDetalleCompra.Rows[e.RowIndex].Cells["IdProducto"].Value); // Asegúrate de que tienes esta columna en el DataGridView
 
+                // Actualizar el stock en la base de datos
+                new CN_Producto().ActualizarStock(idProducto, cantidadRecibida);
+            }
+        }
+
+        private void btnConfirmarRecepcion_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dgvDetalleCompra.Rows)
+            {
+                if (row.Cells["IdDetalleCompra"].Value != null)
+                {
+                    int idDetalleCompra = Convert.ToInt32(row.Cells["IdDetalleCompra"].Value);
+                    int cantidadRecibida = Convert.ToInt32(row.Cells["CantidadRecibida"].Value);
+                    int idProducto = Convert.ToInt32(row.Cells["IdProducto"].Value);
+
+                    // Actualizar el stock
+                    new CN_Producto().ActualizarStock(idProducto, cantidadRecibida);
+
+                    // Actualizar la cantidad recibida en la base de datos
+                    new CN_Compra().ActualizarCantidadRecibida(idDetalleCompra, cantidadRecibida);
+                }
+            }
+
+            // Actualizar el estado de la orden de compra
+            string nuevoEstado = cboEstado.SelectedItem.ToString();
+            new CN_Compra().ActualizarEstadoOrdenCompra(IdOrden, nuevoEstado);
+
+            MessageBox.Show("Recepción confirmada y stock actualizado.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

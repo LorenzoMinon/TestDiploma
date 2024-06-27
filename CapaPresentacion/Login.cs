@@ -30,42 +30,22 @@ namespace CapaPresentacion
 
         private void btningresar_Click(object sender, EventArgs e)
         {
-            //List<Usuario> Test = new CN_Usuario().Listar();
-            //Usuario ousuario = new CN_Usuario().Listar().Where(u => u.Documento == txtdocumento.Text && u.Clave == txtclave.Text).FirstOrDefault();
+            List<Usuario> Test = new CN_Usuario().Listar();
+            Usuario ousuario = new CN_Usuario().Listar().Where(u => u.Documento == txtdocumento.Text && u.Clave == txtclave.Text).FirstOrDefault();
 
-            //if(ousuario != null)
-            //{
-            //    Inicio form = new Inicio(ousuario);
-
-            //    form.Show();
-            //    this.Hide();
-
-            //    form.FormClosing += frm_closing;
-            //}
-            //else
-            //{
-            //    MessageBox.Show("No se encontro el usuario", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //}
-
-            string documento = txtdocumento.Text;
-            string clave = txtclave.Text;
-
-            Usuario usuario = userService.ObtenerUsuarioPorDocumento(documento);
-            if (usuario != null && usuario.Clave == clave)
+            if(ousuario != null)
             {
+                Inicio form = new Inicio(ousuario);
 
-                    Inicio form = new Inicio(usuario);
+                form.Show();
+                this.Hide();
 
-                    form.Show();
-                    this.Hide();
-
-                    form.FormClosing += frm_closing;
+                form.FormClosing += frm_closing;
             }
             else
             {
-                MessageBox.Show("Nombre de usuario o contraseña incorrectos.");
+                MessageBox.Show("No se encontro el usuario", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-
 
 
         }

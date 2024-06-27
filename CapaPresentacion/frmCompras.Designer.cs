@@ -285,6 +285,7 @@
             this.txtcodproducto.Name = "txtcodproducto";
             this.txtcodproducto.Size = new System.Drawing.Size(133, 20);
             this.txtcodproducto.TabIndex = 1;
+            this.txtcodproducto.TextChanged += new System.EventHandler(this.txtcodproducto_TextChanged_1);
             this.txtcodproducto.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtcodproducto_KeyDown);
             // 
             // label9

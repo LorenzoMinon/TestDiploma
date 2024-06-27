@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaEntidad
 {
@@ -15,8 +12,7 @@ namespace CapaEntidad
         public string NumeroDocumento { get; set; }
         public decimal MontoTotal { get; set; }
         public List<Detalle_Compra> oDetalleCompra { get; set; }
-        public string FechaRegistro { get; set; }
-
+        public DateTime FechaRegistro { get; set; } // Asegurarse de que es DateTime
+        public string Estado { get; set; } // Añadimos la propiedad Estado
     }
 }
-

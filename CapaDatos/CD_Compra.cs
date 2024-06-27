@@ -36,6 +36,19 @@ namespace CapaDatos
             }
             return idcorrelativo;
         }
+        public void ActualizarDetalleCompra(int idProducto, int cantidadRecibida, string estado)
+        {
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ActualizarDetalleCompra", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                cmd.Parameters.AddWithValue("@CantidadRecibida", cantidadRecibida);
+                cmd.Parameters.AddWithValue("@Estado", estado);
+                cmd.ExecuteNonQuery();
+            }
+        }
 
         public bool Registrar(Compra obj, DataTable DetalleCompra, out string Mensaje)
         {
@@ -127,7 +140,7 @@ namespace CapaDatos
                                 TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"].ToString()),
-                                FechaRegistro = dr["FechaRegistro"].ToString()
+                                FechaRegistro = Convert.ToDateTime(dr["FechaRegistro"]),
                             };
                         }
 
@@ -191,6 +204,234 @@ namespace CapaDatos
             }
             return oLista;
         }
+        public List<Compra> ListarOrdenesDeCompra()
+        {
+            List<Compra> lista = new List<Compra>();
 
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT c.IdCompra, pr.RazonSocial, c.FechaRegistro, c.Estado");
+                    query.AppendLine("FROM Compra c");
+                    query.AppendLine("INNER JOIN Proveedor pr ON pr.IdProveedor = c.IdProveedor");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
+                    cmd.CommandType = CommandType.Text;
+
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Compra
+                            {
+                                IdCompra = Convert.ToInt32(dr["IdCompra"]),
+                                oProveedor = new Proveedor { RazonSocial = dr["RazonSocial"].ToString() },
+                                FechaRegistro = Convert.ToDateTime(dr["FechaRegistro"]),
+                                Estado = dr["Estado"].ToString()
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<Compra>();
+                }
+            }
+
+            return lista;
+        }
+
+        public Compra ObtenerCompraPorId(int idCompra)
+        {
+            Compra obj = null;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    // Consulta para obtener la compra y los detalles de la compra
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT c.IdCompra, u.NombreCompleto, pr.Documento, pr.RazonSocial,");
+                    query.AppendLine("c.TipoDocumento, c.NumeroDocumento, c.MontoTotal, c.FechaRegistro, c.Estado");
+                    query.AppendLine("FROM Compra c");
+                    query.AppendLine("INNER JOIN Usuarios u ON u.IdUsuario = c.IdUsuario");
+                    query.AppendLine("INNER JOIN Proveedor pr ON pr.IdProveedor = c.IdProveedor");
+                    query.AppendLine("WHERE c.IdCompra = @idCompra");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
+                    cmd.Parameters.AddWithValue("@idCompra", idCompra);
+                    cmd.CommandType = CommandType.Text;
+
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            obj = new Compra
+                            {
+                                IdCompra = Convert.ToInt32(dr["IdCompra"]),
+                                oUsuario = new Usuario { NombreCompleto = dr["NombreCompleto"].ToString() },
+                                oProveedor = new Proveedor { Documento = dr["Documento"].ToString(), RazonSocial = dr["RazonSocial"].ToString() },
+                                TipoDocumento = dr["TipoDocumento"].ToString(),
+                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                                FechaRegistro = Convert.ToDateTime(dr["FechaRegistro"]),
+                                Estado = dr["Estado"].ToString()
+                            };
+                        }
+                    }
+
+                    if (obj != null)
+                    {
+                        query.Clear();
+                        query.AppendLine("SELECT dc.IdDetalleCompra, p.Nombre, dc.PrecioCompra, dc.Cantidad, dc.CantidadRecibida, dc.MontoTotal");
+                        query.AppendLine("FROM DETALLE_COMPRA dc");
+                        query.AppendLine("INNER JOIN Producto p ON p.IdProducto = dc.IdProducto");
+                        query.AppendLine("WHERE dc.IdCompra = @idCompra");
+
+                        cmd = new SqlCommand(query.ToString(), conexion);
+                        cmd.Parameters.AddWithValue("@idCompra", idCompra);
+                        cmd.CommandType = CommandType.Text;
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            obj.oDetalleCompra = new List<Detalle_Compra>();
+
+                            while (dr.Read())
+                            {
+                                obj.oDetalleCompra.Add(new Detalle_Compra
+                                {
+                                    IdDetalleCompra = Convert.ToInt32(dr["IdDetalleCompra"]),
+                                    oProducto = new Producto { Nombre = dr["Nombre"].ToString() },
+                                    PrecioCompra = Convert.ToDecimal(dr["PrecioCompra"]),
+                                    Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                                    CantidadRecibida = Convert.ToInt32(dr["CantidadRecibida"]),
+                                    MontoTotal = Convert.ToDecimal(dr["MontoTotal"])
+                                });
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    obj = null;
+                }
+            }
+
+            return obj;
+        }
+        public bool ActualizarOrdenCompra(int idCompra, string estado, List<Detalle_Compra> detalles)
+        {
+            bool resultado = false;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlTransaction transaccion = conexion.BeginTransaction();
+
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("UPDATE Compra SET Estado = @estado WHERE IdCompra = @idCompra");
+
+                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion, transaccion);
+                    cmd.Parameters.AddWithValue("@estado", estado);
+                    cmd.Parameters.AddWithValue("@idCompra", idCompra);
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.ExecuteNonQuery();
+
+                    foreach (var detalle in detalles)
+                    {
+                        query.Clear();
+                        query.AppendLine("UPDATE DETALLE_COMPRA SET CantidadRecibida = @cantidadRecibida WHERE IdDetalleCompra = @idDetalleCompra");
+
+                        cmd = new SqlCommand(query.ToString(), conexion, transaccion);
+                        cmd.Parameters.AddWithValue("@cantidadRecibida", detalle.CantidadRecibida);
+                        cmd.Parameters.AddWithValue("@idDetalleCompra", detalle.IdDetalleCompra);
+                        cmd.CommandType = CommandType.Text;
+
+                        cmd.ExecuteNonQuery();
+
+                        if (estado == "Parcialmente Completado" || estado == "Completado")
+                        {
+                            query.Clear();
+                            query.AppendLine("UPDATE Producto SET Stock = Stock + @cantidadRecibida WHERE IdProducto = @idProducto");
+
+                            cmd = new SqlCommand(query.ToString(), conexion, transaccion);
+                            cmd.Parameters.AddWithValue("@cantidadRecibida", detalle.CantidadRecibida);
+                            cmd.Parameters.AddWithValue("@idProducto", detalle.oProducto.IdProducto);
+                            cmd.CommandType = CommandType.Text;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaccion.Commit();
+                    resultado = true;
+                }
+                catch (Exception ex)
+                {
+                    resultado = false;
+                }
+            }
+
+            return resultado;
+        }
+        public bool ActualizarCantidadRecibida(int idDetalleCompra, int cantidadRecibida)
+        {
+            bool respuesta = false;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_ActualizarCantidadRecibida", conexion);
+                    cmd.Parameters.AddWithValue("IdDetalleCompra", idDetalleCompra);
+                    cmd.Parameters.AddWithValue("CantidadRecibida", cantidadRecibida);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+                    respuesta = true;
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+            }
+            return respuesta;
+        }
+
+        // Método para actualizar el estado de la orden de compra
+        public bool ActualizarEstadoOrdenCompra(int idOrden, string estado)
+        {
+            bool respuesta = false;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_ActualizarEstadoOrdenCompra", conexion);
+                    cmd.Parameters.AddWithValue("IdOrden", idOrden);
+                    cmd.Parameters.AddWithValue("Estado", estado);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+                    respuesta = true;
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+            }
+            return respuesta;
+        }
     }
 }

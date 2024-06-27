@@ -278,14 +278,15 @@ namespace CapaPresentacion
             detalle_compra.Columns.Add("Cantidad", typeof(int));
             detalle_compra.Columns.Add("MontoTotal", typeof(decimal));
 
-            foreach (DataGridViewRow row in dgvdata.Rows) {
+            foreach (DataGridViewRow row in dgvdata.Rows)
+            {
                 detalle_compra.Rows.Add(
                     new object[] {
-                        Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
-                        row.Cells["PrecioCompra"].Value.ToString(),
-                        row.Cells["PrecioVenta"].Value.ToString(),
-                        row.Cells["Cantidad"].Value.ToString(),
-                        row.Cells["SubTotal"].Value.ToString()
+                Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
+                row.Cells["PrecioCompra"].Value.ToString(),
+                row.Cells["PrecioVenta"].Value.ToString(),
+                row.Cells["Cantidad"].Value.ToString(),
+                row.Cells["SubTotal"].Value.ToString()
                     });
             }
 
@@ -298,7 +299,8 @@ namespace CapaPresentacion
                 oProveedor = new Proveedor() { IdProveedor = Convert.ToInt32(txtidproveedor.Text) },
                 TipoDocumento = ((OpcionCombo)cbotipodocumento.SelectedItem).Texto,
                 NumeroDocumento = numerodocumento,
-                MontoTotal = Convert.ToDecimal(txttotalpagar.Text)
+                MontoTotal = Convert.ToDecimal(txttotalpagar.Text),
+                Estado = "Pendiente"
             };
 
             string mensaje = string.Empty;
@@ -322,6 +324,11 @@ namespace CapaPresentacion
             {
                 MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        private void txtcodproducto_TextChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

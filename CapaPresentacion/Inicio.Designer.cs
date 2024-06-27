@@ -43,6 +43,7 @@
             this.menucompras = new FontAwesome.Sharp.IconMenuItem();
             this.submenuregistrarcompra = new FontAwesome.Sharp.IconMenuItem();
             this.submenuverdetallecompra = new FontAwesome.Sharp.IconMenuItem();
+            this.menuordencompra = new System.Windows.Forms.ToolStripMenuItem();
             this.menuclientes = new FontAwesome.Sharp.IconMenuItem();
             this.menuproveedores = new FontAwesome.Sharp.IconMenuItem();
             this.menureportes = new FontAwesome.Sharp.IconMenuItem();
@@ -110,14 +111,14 @@
             // submenupermisossimples
             // 
             this.submenupermisossimples.Name = "submenupermisossimples";
-            this.submenupermisossimples.Size = new System.Drawing.Size(180, 22);
+            this.submenupermisossimples.Size = new System.Drawing.Size(179, 22);
             this.submenupermisossimples.Text = "Permisos simples";
             this.submenupermisossimples.Click += new System.EventHandler(this.submenupermisossimples_Click);
             // 
             // submenugruposdepermisos
             // 
             this.submenugruposdepermisos.Name = "submenugruposdepermisos";
-            this.submenugruposdepermisos.Size = new System.Drawing.Size(180, 22);
+            this.submenugruposdepermisos.Size = new System.Drawing.Size(179, 22);
             this.submenugruposdepermisos.Text = "Grupos de permisos";
             this.submenugruposdepermisos.Click += new System.EventHandler(this.submenugruposdepermisos_Click);
             // 
@@ -202,7 +203,8 @@
             this.menucompras.AutoSize = false;
             this.menucompras.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.submenuregistrarcompra,
-            this.submenuverdetallecompra});
+            this.submenuverdetallecompra,
+            this.menuordencompra});
             this.menucompras.IconChar = FontAwesome.Sharp.IconChar.DollyFlatbed;
             this.menucompras.IconColor = System.Drawing.Color.Black;
             this.menucompras.IconFont = FontAwesome.Sharp.IconFont.Auto;
@@ -219,7 +221,7 @@
             this.submenuregistrarcompra.IconColor = System.Drawing.Color.Black;
             this.submenuregistrarcompra.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuregistrarcompra.Name = "submenuregistrarcompra";
-            this.submenuregistrarcompra.Size = new System.Drawing.Size(129, 22);
+            this.submenuregistrarcompra.Size = new System.Drawing.Size(180, 22);
             this.submenuregistrarcompra.Text = "Registrar";
             this.submenuregistrarcompra.Click += new System.EventHandler(this.submenuregistrarcompra_Click);
             // 
@@ -229,9 +231,16 @@
             this.submenuverdetallecompra.IconColor = System.Drawing.Color.Black;
             this.submenuverdetallecompra.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuverdetallecompra.Name = "submenuverdetallecompra";
-            this.submenuverdetallecompra.Size = new System.Drawing.Size(129, 22);
+            this.submenuverdetallecompra.Size = new System.Drawing.Size(180, 22);
             this.submenuverdetallecompra.Text = "Ver Detalle";
-            this.submenuverdetallecompra.Click += new System.EventHandler(this.submenuverdetallecompra_Click);
+            //this.submenuverdetallecompra.Click += new System.EventHandler(this.submenuverdetallecompra_Click);
+            // 
+            // menuordencompra
+            // 
+            this.menuordencompra.Name = "menuordencompra";
+            this.menuordencompra.Size = new System.Drawing.Size(180, 22);
+            this.menuordencompra.Text = "Ordenes de compra";
+            this.menuordencompra.Click += new System.EventHandler(this.menuordencompra_Click);
             // 
             // menuclientes
             // 
@@ -406,6 +415,7 @@
         private FontAwesome.Sharp.IconMenuItem menupermisos;
         private System.Windows.Forms.ToolStripMenuItem submenupermisossimples;
         private System.Windows.Forms.ToolStripMenuItem submenugruposdepermisos;
+        private System.Windows.Forms.ToolStripMenuItem menuordencompra;
     }
 }
 

@@ -23,7 +23,7 @@ namespace CapaDatos
                 {
 
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select IdCategoria,Descripcion,Estado from Categoria");
+                    query.AppendLine("select IdCategoria,Descripcion,Estado from Categorias");
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.CommandType = CommandType.Text;
 

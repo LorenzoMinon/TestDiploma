@@ -39,6 +39,25 @@ namespace CapaNegocio
             return oCompra;
         }
 
+        public List<Compra> ListarOrdenesDeCompra()
+        {
+            return objcd_compra.ListarOrdenesDeCompra();
+        }
 
+        public Compra ObtenerCompraPorId(int idCompra)
+        {
+            return objcd_compra.ObtenerCompraPorId(idCompra);
+        }
+
+        public bool ActualizarCantidadRecibida(int idDetalleCompra, int cantidadRecibida)
+        {
+            return objcd_compra.ActualizarCantidadRecibida(idDetalleCompra, cantidadRecibida);
+        }
+
+        // Método para actualizar el estado de la orden de compra
+        public bool ActualizarEstadoOrdenCompra(int idOrden, string estado)
+        {
+            return objcd_compra.ActualizarEstadoOrdenCompra(idOrden, estado);
+        }
     }
 }

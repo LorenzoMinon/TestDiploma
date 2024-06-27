@@ -88,5 +88,10 @@ namespace CapaNegocio
         {
             return objcd_Producto.Eliminar(obj, out Mensaje);
         }
+
+        public bool ActualizarStock(int idProducto, int cantidadRecibida)
+        {
+            return objcd_Producto.ActualizarStock(idProducto, cantidadRecibida);
+        }
     }
 }
