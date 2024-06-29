@@ -93,5 +93,7 @@ namespace CapaNegocio
         {
             return objcd_Producto.ActualizarStock(idProducto, cantidadRecibida);
         }
+
+
     }
 }

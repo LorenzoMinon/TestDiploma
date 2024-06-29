@@ -253,7 +253,7 @@ namespace CapaDatos
             {
                 try
                 {
-                    // Consulta para obtener la compra y los detalles de la compra
+                    // Consulta para obtener la compra
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("SELECT c.IdCompra, u.NombreCompleto, pr.Documento, pr.RazonSocial,");
                     query.AppendLine("c.TipoDocumento, c.NumeroDocumento, c.MontoTotal, c.FechaRegistro, c.Estado");
@@ -264,7 +264,7 @@ namespace CapaDatos
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@idCompra", idCompra);
-                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandType = System.Data.CommandType.Text;
 
                     conexion.Open();
 
@@ -286,6 +286,7 @@ namespace CapaDatos
                         }
                     }
 
+                    // Obtener los detalles de la compra
                     if (obj != null)
                     {
                         query.Clear();
@@ -296,7 +297,7 @@ namespace CapaDatos
 
                         cmd = new SqlCommand(query.ToString(), conexion);
                         cmd.Parameters.AddWithValue("@idCompra", idCompra);
-                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandType = System.Data.CommandType.Text;
 
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
@@ -383,7 +384,7 @@ namespace CapaDatos
 
             return resultado;
         }
-        public bool ActualizarCantidadRecibida(int idDetalleCompra, int cantidadRecibida)
+        public bool ActualizarCantidadRecibida(int idDetalleCompra, int cantidadRecibida, bool actualizarStock)
         {
             bool respuesta = false;
 
@@ -391,13 +392,32 @@ namespace CapaDatos
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("sp_ActualizarCantidadRecibida", conexion);
+                    conexion.Open();
+                    SqlTransaction transaccion = conexion.BeginTransaction();
+
+                    // Actualizar la cantidad recibida
+                    SqlCommand cmd = new SqlCommand("sp_ActualizarCantidadRecibida", conexion, transaccion);
                     cmd.Parameters.AddWithValue("IdDetalleCompra", idDetalleCompra);
                     cmd.Parameters.AddWithValue("CantidadRecibida", cantidadRecibida);
                     cmd.CommandType = CommandType.StoredProcedure;
-
-                    conexion.Open();
                     cmd.ExecuteNonQuery();
+
+                    if (actualizarStock) //pasa como true .!
+                    {
+                        // Obtener el ID del producto asociado con el detalle de compra
+                        cmd = new SqlCommand("SELECT IdProducto FROM DETALLE_COMPRA WHERE IdDetalleCompra = @IdDetalleCompra", conexion, transaccion);
+                        cmd.Parameters.AddWithValue("IdDetalleCompra", idDetalleCompra);
+                        int idProducto = (int)cmd.ExecuteScalar();
+
+                        // Actualizar el stock
+                        cmd = new SqlCommand("sp_ActualizarStock", conexion, transaccion);
+                        cmd.Parameters.AddWithValue("IdProducto", idProducto);
+                        cmd.Parameters.AddWithValue("CantidadRecibida", cantidadRecibida);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaccion.Commit();
                     respuesta = true;
                 }
                 catch (Exception ex)
@@ -407,6 +427,10 @@ namespace CapaDatos
             }
             return respuesta;
         }
+
+
+
+
 
         // Método para actualizar el estado de la orden de compra
         public bool ActualizarEstadoOrdenCompra(int idOrden, string estado)

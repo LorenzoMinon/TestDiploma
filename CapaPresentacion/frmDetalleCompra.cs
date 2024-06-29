@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using CapaEntidad;
 using CapaNegocio;
-using CapaEntidad;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace CapaPresentacion
 {
@@ -17,9 +19,6 @@ namespace CapaPresentacion
             IdOrden = idOrden;
             usuarioActual = usuario;
             CargarDetallesOrdenCompra(IdOrden);
-
-            // Agregar el evento CellEndEdit
-            dgvDetalleCompra.CellEndEdit += new DataGridViewCellEventHandler(dgvDetalleCompra_CellEndEdit);
         }
 
         private void CargarDetallesOrdenCompra(int idOrden)
@@ -40,7 +39,9 @@ namespace CapaPresentacion
                 foreach (Detalle_Compra detalle in oCompra.oDetalleCompra ?? new List<Detalle_Compra>())
                 {
                     int index = dgvDetalleCompra.Rows.Add();
+                    dgvDetalleCompra.Rows[index].Cells["IdDetalleCompra"].Value = detalle.IdDetalleCompra;
                     dgvDetalleCompra.Rows[index].Cells["Producto"].Value = detalle.oProducto?.Nombre ?? string.Empty;
+                    dgvDetalleCompra.Rows[index].Cells["IdProducto"].Value = detalle.oProducto?.IdProducto ?? 0;
                     dgvDetalleCompra.Rows[index].Cells["PrecioCompra"].Value = detalle.PrecioCompra;
                     dgvDetalleCompra.Rows[index].Cells["Cantidad"].Value = detalle.Cantidad;
                     dgvDetalleCompra.Rows[index].Cells["CantidadRecibida"].Value = detalle.CantidadRecibida;
@@ -59,7 +60,7 @@ namespace CapaPresentacion
             {
                 // Obtener la cantidad recibida y actualizar el stock
                 int cantidadRecibida = Convert.ToInt32(dgvDetalleCompra.Rows[e.RowIndex].Cells["CantidadRecibida"].Value);
-                int idProducto = Convert.ToInt32(dgvDetalleCompra.Rows[e.RowIndex].Cells["IdProducto"].Value); // Asegúrate de que tienes esta columna en el DataGridView
+                int idProducto = Convert.ToInt32(dgvDetalleCompra.Rows[e.RowIndex].Cells["IdProducto"].Value);
 
                 // Actualizar el stock en la base de datos
                 new CN_Producto().ActualizarStock(idProducto, cantidadRecibida);
@@ -74,13 +75,9 @@ namespace CapaPresentacion
                 {
                     int idDetalleCompra = Convert.ToInt32(row.Cells["IdDetalleCompra"].Value);
                     int cantidadRecibida = Convert.ToInt32(row.Cells["CantidadRecibida"].Value);
-                    int idProducto = Convert.ToInt32(row.Cells["IdProducto"].Value);
 
-                    // Actualizar el stock
-                    new CN_Producto().ActualizarStock(idProducto, cantidadRecibida);
-
-                    // Actualizar la cantidad recibida en la base de datos
-                    new CN_Compra().ActualizarCantidadRecibida(idDetalleCompra, cantidadRecibida);
+                    // Actualizar la cantidad recibida y opcionalmente el stock
+                    new CN_Compra().ActualizarCantidadRecibida(idDetalleCompra, cantidadRecibida, true);
                 }
             }
 
@@ -89,6 +86,11 @@ namespace CapaPresentacion
             new CN_Compra().ActualizarEstadoOrdenCompra(IdOrden, nuevoEstado);
 
             MessageBox.Show("Recepción confirmada y stock actualizado.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void frmDetalleCompra_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

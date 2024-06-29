@@ -207,12 +207,10 @@ namespace CapaDatos
             {
                 try
                 {
-                    StringBuilder query = new StringBuilder();
-                    query.AppendLine("UPDATE Producto SET Stock = Stock + @cantidadRecibida WHERE IdProducto = @idProducto");
-
-                    SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
-                    cmd.Parameters.AddWithValue("@cantidadRecibida", cantidadRecibida);
-                    cmd.Parameters.AddWithValue("@idProducto", idProducto);
+                    SqlCommand cmd = new SqlCommand("sp_ActualizarStock", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                    cmd.Parameters.AddWithValue("@CantidadRecibida", cantidadRecibida);
 
                     conexion.Open();
                     cmd.ExecuteNonQuery();
@@ -226,6 +224,8 @@ namespace CapaDatos
 
             return resultado;
         }
+
+
 
     }
 }
