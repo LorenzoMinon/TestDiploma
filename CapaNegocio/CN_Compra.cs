@@ -8,6 +8,17 @@ namespace CapaNegocio
     public class CN_Compra
     {
         private CD_Compra objcd_Compra = new CD_Compra();
+        private CN_Auditoria auditoriaNegocio = new CN_Auditoria();
+
+        public CN_Compra()
+        {
+            objcd_Compra.OnCompraAudit += Objcd_Compra_OnCompraAudit;
+        }
+
+        private void Objcd_Compra_OnCompraAudit(object sender, CD_Compra.AuditoriaEventArgs e)
+        {
+            auditoriaNegocio.RegistrarAuditoria(e.Tabla, e.Operacion, e.UsuarioID, e.ValorAnterior, e.ValorNuevo);
+        }
 
         public int ObtenerCorrelativo()
         {

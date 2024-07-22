@@ -1,26 +1,26 @@
 ﻿using CapaDatos;
 using CapaEntidad;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaNegocio
 {
     public class CN_Reporte
     {
-        private CD_Reporte objcd_reporte = new CD_Reporte();
+        private CD_Reporte objcd_Reporte = new CD_Reporte();
 
-        public List<ReporteCompra> Compra(string fechainicio, string fechafin, int idproveedor)
+        public List<ReporteComprasPorProveedor> ObtenerReporteComprasPorProveedor()
         {
-            return objcd_reporte.Compra(fechainicio, fechafin, idproveedor);
+            return objcd_Reporte.ReporteComprasPorProveedor();
         }
 
-
-        public List<ReporteVenta> Venta(string fechainicio, string fechafin)
+        public List<ReporteCantidadCompradaPorProducto> ObtenerReporteCantidadCompradaPorProducto()
         {
-            return objcd_reporte.Venta(fechainicio, fechafin);
+            return objcd_Reporte.ReporteCantidadCompradaPorProducto();
+        }
+
+        public List<ReporteGananciaPotencialPorProducto> ObtenerReporteGananciaPotencialPorProducto()
+        {
+            return objcd_Reporte.ReporteGananciaPotencialPorProducto();
         }
     }
 }

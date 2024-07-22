@@ -88,7 +88,7 @@ namespace CapaPresentacion
             formulario.TopLevel = false;
             formulario.FormBorderStyle = FormBorderStyle.None;
             formulario.Dock = DockStyle.Fill;
-            formulario.BackColor = Color.SteelBlue;
+            formulario.BackColor = Color.FromArgb(61, 63, 76);
 
             contenedor.Controls.Add(formulario);
             formulario.Show();
@@ -168,6 +168,22 @@ namespace CapaPresentacion
         private void menuordencompra_Click(object sender, EventArgs e)
         {
             AbrirFormulario(menucompras, new frmOrdenesDeCompra(usuarioActual));
+        }
+
+        private void contenedor_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void menuauditoria_Click(object sender, EventArgs e)
+        {
+            AbrirFormulario(menuauditoria, new frmReporteAuditoria());
+
+        }
+        private void Inicio_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CN_Usuario usuarioNegocio = new CN_Usuario();
+            usuarioNegocio.CerrarSesion(usuarioActual.IdUsuario);
         }
     }
 }

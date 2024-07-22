@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using System.Data;
 using System.Data.SqlClient;
@@ -12,7 +9,9 @@ namespace CapaDatos
 {
     public class CD_Usuario
     {
-
+        public delegate void AuditoriaEventHandler(object sender, AuditoriaEventArgs e);
+        public event AuditoriaEventHandler OnLoginAudit;
+        public event AuditoriaEventHandler OnLogoutAudit;
         public List<Usuario> Listar()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -49,7 +48,77 @@ namespace CapaDatos
             }
 
             return lista;
+        }
 
+        public Usuario IniciarSesion(string correo, string clave)
+        {
+            Usuario usuario = null;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                string query = "SELECT * FROM usuarios WHERE Correo = @Correo AND Clave = @Clave";
+                SqlCommand cmd = new SqlCommand(query, conexion);
+                cmd.Parameters.AddWithValue("@Correo", correo);
+                cmd.Parameters.AddWithValue("@Clave", clave);
+                conexion.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        usuario = new Usuario
+                        {
+                            IdUsuario = (int)reader["IdUsuario"],
+                            Documento = (string)reader["Documento"],
+                            NombreCompleto = (string)reader["NombreCompleto"],
+                            Correo = (string)reader["Correo"],
+                            Clave = (string)reader["Clave"],
+                            Estado = (bool)reader["Estado"]
+                        };
+                    }
+                }
+
+                if (usuario != null)
+                {
+                    // Disparar evento de auditoría de login
+                    OnLoginAudit?.Invoke(this, new AuditoriaEventArgs
+                    {
+                        UsuarioID = usuario.IdUsuario,
+                        Tabla = "Usuarios",
+                        Operacion = "LOGIN",
+                        ValorAnterior = null,
+                        ValorNuevo = "Usuario inició sesión"
+                    });
+                }
+            }
+
+            return usuario;
+        }
+
+        public void CerrarSesion(int usuarioID)
+        {
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                conexion.Open();
+
+                // Disparar evento de auditoría de logout
+                OnLogoutAudit?.Invoke(this, new AuditoriaEventArgs
+                {
+                    UsuarioID = usuarioID,
+                    Tabla = "Usuarios",
+                    Operacion = "LOGOUT",
+                    ValorAnterior = null,
+                    ValorNuevo = "Usuario cerró sesión"
+                });
+            }
+        }
+
+        public class AuditoriaEventArgs : EventArgs
+        {
+            public int UsuarioID { get; set; }
+            public string Tabla { get; set; }
+            public string Operacion { get; set; }
+            public string ValorAnterior { get; set; }
+            public string ValorNuevo { get; set; }
         }
 
 
@@ -223,7 +292,6 @@ namespace CapaDatos
                 return result > 0;
             }
         }
-
 
     }
 }

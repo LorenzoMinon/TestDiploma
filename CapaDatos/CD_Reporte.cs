@@ -3,117 +3,108 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaDatos
 {
     public class CD_Reporte
     {
-        public List<ReporteCompra> Compra(string fechainicio, string fechafin, int idproveedor)
+        public List<ReporteComprasPorProveedor> ReporteComprasPorProveedor()
         {
-            List<ReporteCompra> lista = new List<ReporteCompra>();
+            List<ReporteComprasPorProveedor> lista = new List<ReporteComprasPorProveedor>();
 
             using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
-                    StringBuilder query = new StringBuilder();
-                    SqlCommand cmd = new SqlCommand("SP_ReporteCompras", conexion);
-                    cmd.Parameters.AddWithValue("fechainicio", fechainicio);
-                    cmd.Parameters.AddWithValue("fechafin", fechafin);
-                    cmd.Parameters.AddWithValue("idproveedor", idproveedor);
+                    SqlCommand cmd = new SqlCommand("sp_ReporteComprasPorProveedor", conexion);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-
-                            lista.Add(new ReporteCompra()
+                            lista.Add(new ReporteComprasPorProveedor()
                             {
-                                FechaRegistro = dr["FechaRegistro"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
-                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                MontoTotal = dr["MontoTotal"].ToString(),
-                                UsuarioRegistro = dr["UsuarioRegistro"].ToString(),
-                                DocumentoProveedor = dr["DocumentoProveedor"].ToString(),
-                                RazonSocial = dr["RazonSocial"].ToString(),
-                                CodigoProducto = dr["CodigoProducto"].ToString(),
-                                NombreProducto = dr["NombreProducto"].ToString(),
-                                Categoria = dr["Categoria"].ToString(),
-                                PrecioCompra = dr["PrecioCompra"].ToString(),
-                                PrecioVenta = dr["PrecioVenta"].ToString(),
-                                Cantidad = dr["Cantidad"].ToString(),
-                                SubTotal = dr["SubTotal"].ToString(),
+                                Proveedor = dr["Proveedor"].ToString(),
+                                TotalComprado = Convert.ToDecimal(dr["TotalComprado"])
                             });
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-
-                    lista = new List<ReporteCompra>();
+                    lista = new List<ReporteComprasPorProveedor>();
                 }
             }
 
             return lista;
-
         }
 
-        public List<ReporteVenta> Venta(string fechainicio, string fechafin)
+        public List<ReporteCantidadCompradaPorProducto> ReporteCantidadCompradaPorProducto()
         {
-            List<ReporteVenta> lista = new List<ReporteVenta>();
+            List<ReporteCantidadCompradaPorProducto> lista = new List<ReporteCantidadCompradaPorProducto>();
 
             using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
                 try
                 {
-                    StringBuilder query = new StringBuilder();
-                    SqlCommand cmd = new SqlCommand("SP_ReporteVentas", conexion);
-                    cmd.Parameters.AddWithValue("fechainicio", fechainicio);
-                    cmd.Parameters.AddWithValue("fechafin", fechafin);
+                    SqlCommand cmd = new SqlCommand("sp_ReporteCantidadCompradaPorProducto", conexion);
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     conexion.Open();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            lista.Add(new ReporteVenta()
+                            lista.Add(new ReporteCantidadCompradaPorProducto()
                             {
-                                FechaRegistro = dr["FechaRegistro"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
-                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
-                                MontoTotal = dr["MontoTotal"].ToString(),
-                                UsuarioRegistro = dr["UsuarioRegistro"].ToString(),
-                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
-                                NombreCliente = dr["NombreCliente"].ToString(),
-                                CodigoProducto = dr["CodigoProducto"].ToString(),
-                                NombreProducto = dr["NombreProducto"].ToString(),
-                                Categoria = dr["Categoria"].ToString(),
-                                PrecioVenta = dr["PrecioVenta"].ToString(),
-                                Cantidad = dr["Cantidad"].ToString(),
-                                SubTotal = dr["SubTotal"].ToString(),
+                                Producto = dr["Producto"].ToString(),
+                                CantidadComprada = Convert.ToInt32(dr["CantidadComprada"])
                             });
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    lista = new List<ReporteVenta>();
+                    lista = new List<ReporteCantidadCompradaPorProducto>();
                 }
             }
 
             return lista;
-
         }
 
+        public List<ReporteGananciaPotencialPorProducto> ReporteGananciaPotencialPorProducto()
+        {
+            List<ReporteGananciaPotencialPorProducto> lista = new List<ReporteGananciaPotencialPorProducto>();
 
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("sp_ReporteGananciaPotencialPorProducto", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conexion.Open();
 
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new ReporteGananciaPotencialPorProducto()
+                            {
+                                Producto = dr["Producto"].ToString(),
+                                GananciaPotencial = Convert.ToDecimal(dr["GananciaPotencial"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<ReporteGananciaPotencialPorProducto>();
+                }
+            }
+
+            return lista;
+        }
     }
 }

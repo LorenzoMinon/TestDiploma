@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿using CapaEntidad;
 using CapaNegocio;
-using CapaEntidad;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace CapaPresentacion
 {
     public partial class Login : Form
     {
+        private CN_Usuario userService = new CN_Usuario();
+
         public Login()
         {
             InitializeComponent();
@@ -26,17 +21,17 @@ namespace CapaPresentacion
             this.Close();
         }
 
-        private CN_Usuario userService = new CN_Usuario();
-
         private void btningresar_Click(object sender, EventArgs e)
         {
-            List<Usuario> Test = new CN_Usuario().Listar();
-            Usuario ousuario = new CN_Usuario().Listar().Where(u => u.Documento == txtdocumento.Text && u.Clave == txtclave.Text).FirstOrDefault();
+            Usuario ousuario = userService.Listar().Where(u => u.Documento == txtdocumento.Text && u.Clave == txtclave.Text).FirstOrDefault();
 
-            if(ousuario != null)
+            if (ousuario != null)
             {
-                Inicio form = new Inicio(ousuario);
+                // Registrar auditoría de login
+                CN_Auditoria auditoriaNegocio = new CN_Auditoria();
+                auditoriaNegocio.RegistrarAuditoria("Usuarios", "LOGIN", ousuario.IdUsuario, null, "Usuario inició sesión");
 
+                Inicio form = new Inicio(ousuario);
                 form.Show();
                 this.Hide();
 
@@ -44,17 +39,15 @@ namespace CapaPresentacion
             }
             else
             {
-                MessageBox.Show("No se encontro el usuario", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("No se encontró el usuario", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-
-
         }
 
         private void frm_closing(object sender, FormClosingEventArgs e)
         {
             txtdocumento.Text = "";
             txtclave.Text = "";
-            this.Show(); //Mostramos cuando ocultamos anteriormente
+            this.Show(); // Mostramos cuando ocultamos anteriormente
         }
 
         private void txtdocumento_TextChanged(object sender, EventArgs e)
@@ -89,6 +82,11 @@ namespace CapaPresentacion
         {
             frmRecuperarClave recuperarClaveForm = new frmRecuperarClave();
             recuperarClaveForm.Show();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

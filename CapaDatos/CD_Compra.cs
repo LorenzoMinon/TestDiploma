@@ -6,17 +6,21 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CapaDatos.CD_Usuario;
 
 namespace CapaDatos
 {
     public class CD_Compra
     {
-        public int ObtenerCorrelativo() {
+
+        public delegate void AuditoriaEventHandler(object sender, AuditoriaEventArgs e);
+        public event AuditoriaEventHandler OnCompraAudit;
+        public int ObtenerCorrelativo()
+        {
             int idcorrelativo = 0;
 
             using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
             {
-
                 try
                 {
                     StringBuilder query = new StringBuilder();
@@ -27,7 +31,6 @@ namespace CapaDatos
                     conexion.Open();
 
                     idcorrelativo = Convert.ToInt32(cmd.ExecuteScalar());
-
                 }
                 catch (Exception ex)
                 {
@@ -35,19 +38,6 @@ namespace CapaDatos
                 }
             }
             return idcorrelativo;
-        }
-        public void ActualizarDetalleCompra(int idProducto, int cantidadRecibida, string estado)
-        {
-            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
-            {
-                conexion.Open();
-                SqlCommand cmd = new SqlCommand("sp_ActualizarDetalleCompra", conexion);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-                cmd.Parameters.AddWithValue("@CantidadRecibida", cantidadRecibida);
-                cmd.Parameters.AddWithValue("@Estado", estado);
-                cmd.ExecuteNonQuery();
-            }
         }
 
         public bool Registrar(Compra obj, DataTable DetalleCompra, out string Mensaje)
@@ -82,7 +72,15 @@ namespace CapaDatos
 
                     if (Respuesta)
                     {
-                        // Registrar la transacción en el plan de cuentas
+                        // Emitir evento de auditoría para la compra registrada
+                        OnCompraAudit?.Invoke(this, new AuditoriaEventArgs
+                        {
+                            UsuarioID = obj.oUsuario.IdUsuario,
+                            Tabla = "Compra",
+                            Operacion = "INSERT",
+                            ValorAnterior = null,
+                            ValorNuevo = $"Compra registrada con ID: {obj.IdCompra}, Monto: {obj.MontoTotal}"
+                        });
 
                         transaction.Commit();
                     }
@@ -100,6 +98,29 @@ namespace CapaDatos
             }
             return Respuesta;
         }
+
+        public class AuditoriaEventArgs : EventArgs
+        {
+            public int UsuarioID { get; set; }
+            public string Tabla { get; set; }
+            public string Operacion { get; set; }
+            public string ValorAnterior { get; set; }
+            public string ValorNuevo { get; set; }
+        }
+        public void ActualizarDetalleCompra(int idProducto, int cantidadRecibida, string estado)
+        {
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ActualizarDetalleCompra", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                cmd.Parameters.AddWithValue("@CantidadRecibida", cantidadRecibida);
+                cmd.Parameters.AddWithValue("@Estado", estado);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
 
 
         public Compra ObtenerCompra(string numero)

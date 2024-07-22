@@ -1,21 +1,18 @@
-﻿using CapaEntidad;
-using CapaNegocio;
-using CapaPresentacion.Utilidades;
+﻿using CapaNegocio;
 using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace CapaPresentacion
 {
     public partial class frmReporteCompras : Form
     {
+        private CN_Reporte reporteNegocio = new CN_Reporte();
+
         public frmReporteCompras()
         {
             InitializeComponent();
@@ -23,159 +20,134 @@ namespace CapaPresentacion
 
         private void frmReporteCompras_Load(object sender, EventArgs e)
         {
-            List<Proveedor> lista = new CN_Proveedor().Listar();
-
-            cboproveedor.Items.Add(new OpcionCombo() { Valor = 0, Texto = "TODOS" });
-            foreach (Proveedor item in lista)
-            {
-                cboproveedor.Items.Add(new OpcionCombo() { Valor = item.IdProveedor, Texto = item.RazonSocial });
-            }
-            cboproveedor.DisplayMember = "Texto";
-            cboproveedor.ValueMember = "Valor";
-            cboproveedor.SelectedIndex = 0;
-
-
-            foreach (DataGridViewColumn columna in dgvdata.Columns)
-            {
-                cbobusqueda.Items.Add(new OpcionCombo() { Valor = columna.Name, Texto = columna.HeaderText });
-            }
-            cbobusqueda.DisplayMember = "Texto";
-            cbobusqueda.ValueMember = "Valor";
-            cbobusqueda.SelectedIndex = 0;
-
-
+            CargarComprasPorProveedor();
+            CargarCantidadCompradaPorProducto();
+            CargarGananciaPotencialPorProducto();
         }
 
-        private void btnbuscarresultado_Click(object sender, EventArgs e)
+        private void CargarComprasPorProveedor()
         {
-            int idproveedor = Convert.ToInt32(((OpcionCombo)cboproveedor.SelectedItem).Valor.ToString());
-
-            List<ReporteCompra> lista = new List<ReporteCompra>();
-
-            lista = new CN_Reporte().Compra(
-                txtfechainicio.Value.ToString("dd/MM/yyyy"),
-                txtfechafin.Value.ToString("dd/MM/yyyy"),
-                idproveedor
-                );
-
-
-            dgvdata.Rows.Clear();
-
-            foreach (ReporteCompra rc in lista)
+            var reportes = reporteNegocio.ObtenerReporteComprasPorProveedor();
+            dgvComprasPorProveedor.DataSource = reportes.Select(r => new
             {
-                dgvdata.Rows.Add(new object[] {
-                    rc.FechaRegistro,
-                    rc.TipoDocumento,
-                    rc.NumeroDocumento,
-                    rc.MontoTotal,
-                    rc.UsuarioRegistro,
-                    rc.DocumentoProveedor,
-                    rc.RazonSocial,
-                    rc.CodigoProducto,
-                    rc.NombreProducto,
-                    rc.Categoria,
-                    rc.PrecioCompra,
-                    rc.PrecioVenta,
-                    rc.Cantidad,
-                    rc.SubTotal
-                });
+                r.Proveedor,
+                r.TotalComprado
+            }).ToList();
 
+            // Configurar el gráfico
+            chartComprasPorProveedor.Series.Clear();
+            Series series = new Series("Compras")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String,
+                YValueType = ChartValueType.Double
+            };
+
+            chartComprasPorProveedor.Series.Add(series);
+
+            foreach (var reporte in reportes)
+            {
+                series.Points.AddXY(reporte.Proveedor, reporte.TotalComprado);
             }
-
-
-
         }
 
-        private void btnexportar_Click(object sender, EventArgs e)
+        private void CargarCantidadCompradaPorProducto()
         {
-            if (dgvdata.Rows.Count < 1)
+            var reportes = reporteNegocio.ObtenerReporteCantidadCompradaPorProducto();
+            dgvCantidadCompradaPorProducto.DataSource = reportes.Select(r => new
             {
+                r.Producto,
+                r.CantidadComprada
+            }).ToList();
 
-                MessageBox.Show("No hay registros para exportar", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            // Configurar el gráfico
+            chartCantidadCompradaPorProducto.Series.Clear();
+            Series series = new Series("Cantidad Comprada")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String,
+                YValueType = ChartValueType.Double
+            };
 
+            chartCantidadCompradaPorProducto.Series.Add(series);
+
+            foreach (var reporte in reportes)
+            {
+                series.Points.AddXY(reporte.Producto, reporte.CantidadComprada);
             }
-            else
+        }
+
+        private void CargarGananciaPotencialPorProducto()
+        {
+            var reportes = reporteNegocio.ObtenerReporteGananciaPotencialPorProducto();
+            dgvGananciaPotencialPorProducto.DataSource = reportes.Select(r => new
             {
+                r.Producto,
+                r.GananciaPotencial
+            }).ToList();
 
-                DataTable dt = new DataTable();
+            // Configurar el gráfico
+            chartGananciaPotencialPorProducto.Series.Clear();
+            Series series = new Series("Ganancia Potencial")
+            {
+                ChartType = SeriesChartType.Column,
+                XValueType = ChartValueType.String,
+                YValueType = ChartValueType.Double
+            };
 
-                foreach (DataGridViewColumn columna in dgvdata.Columns)
+            chartGananciaPotencialPorProducto.Series.Add(series);
+
+            foreach (var reporte in reportes)
+            {
+                series.Points.AddXY(reporte.Producto, reporte.GananciaPotencial);
+            }
+        }
+
+        private void btnExportarExcel_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    dt.Columns.Add(columna.HeaderText, typeof(string));
-                }
-
-                foreach (DataGridViewRow row in dgvdata.Rows)
-                {
-                    if (row.Visible)
-                        dt.Rows.Add(new object[] {
-                            row.Cells[0].Value.ToString(),
-                            row.Cells[1].Value.ToString(),
-                            row.Cells[2].Value.ToString(),
-                            row.Cells[3].Value.ToString(),
-                            row.Cells[4].Value.ToString(),
-                            row.Cells[5].Value.ToString(),
-                            row.Cells[6].Value.ToString(),
-                            row.Cells[7].Value.ToString(),
-                            row.Cells[8].Value.ToString(),
-                            row.Cells[9].Value.ToString(),
-                            row.Cells[10].Value.ToString(),
-                            row.Cells[11].Value.ToString(),
-                            row.Cells[12].Value.ToString(),
-                            row.Cells[13].Value.ToString()
-                        });
-                }
-
-                SaveFileDialog savefile = new SaveFileDialog();
-                savefile.FileName = string.Format("ReporteCompras_{0}.xlsx", DateTime.Now.ToString("ddMMyyyyHHmmss"));
-                savefile.Filter = "Excel Files | *.xlsx";
-
-                if (savefile.ShowDialog() == DialogResult.OK)
-                {
-
-                    try
+                    using (XLWorkbook workbook = new XLWorkbook())
                     {
-                        XLWorkbook wb = new XLWorkbook();
-                        var hoja = wb.Worksheets.Add(dt, "Informe");
-                        hoja.ColumnsUsed().AdjustToContents();
-                        wb.SaveAs(savefile.FileName);
-                        MessageBox.Show("Reporte Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var dtComprasPorProveedor = ConvertToDataTable((dgvComprasPorProveedor.DataSource as IEnumerable<dynamic>).ToList());
+                        var dtCantidadCompradaPorProducto = ConvertToDataTable((dgvCantidadCompradaPorProducto.DataSource as IEnumerable<dynamic>).ToList());
+                        var dtGananciaPotencialPorProducto = ConvertToDataTable((dgvGananciaPotencialPorProducto.DataSource as IEnumerable<dynamic>).ToList());
 
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Error al generar reporte", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
+                        workbook.Worksheets.Add(dtComprasPorProveedor, "Compras Por Proveedor");
+                        workbook.Worksheets.Add(dtCantidadCompradaPorProducto, "Cantidad Comprada Por Producto");
+                        workbook.Worksheets.Add(dtGananciaPotencialPorProducto, "Ganancia Potencial Por Producto");
 
+                        workbook.SaveAs(sfd.FileName);
+                    }
+                    MessageBox.Show("Exportación a Excel exitosa", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
             }
         }
 
-        private void btnbuscar_Click(object sender, EventArgs e)
+        private DataTable ConvertToDataTable(List<dynamic> list)
         {
-            string columnaFiltro = ((OpcionCombo)cbobusqueda.SelectedItem).Valor.ToString();
-
-            if (dgvdata.Rows.Count > 0)
+            var dt = new DataTable();
+            if (list.Count > 0)
             {
-                foreach (DataGridViewRow row in dgvdata.Rows)
+                var firstRecord = list[0];
+                foreach (var prop in firstRecord.GetType().GetProperties())
                 {
+                    dt.Columns.Add(prop.Name, prop.PropertyType);
+                }
 
-                    if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtbusqueda.Text.Trim().ToUpper()))
-                        row.Visible = true;
-                    else
-                        row.Visible = false;
+                foreach (var record in list)
+                {
+                    var row = dt.NewRow();
+                    foreach (var prop in record.GetType().GetProperties())
+                    {
+                        row[prop.Name] = prop.GetValue(record, null);
+                    }
+                    dt.Rows.Add(row);
                 }
             }
+            return dt;
         }
-
-        private void btnlimpiarbuscador_Click(object sender, EventArgs e)
-        {
-            txtbusqueda.Text = "";
-            foreach (DataGridViewRow row in dgvdata.Rows)
-            {
-                row.Visible = true;
-            }
-        }
-
     }
 }

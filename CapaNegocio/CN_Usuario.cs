@@ -14,13 +14,41 @@ namespace CapaNegocio
         //Nuevo
         private string connectionString = Conexion.Instancia.Cadena;
         private CD_Usuario cdUsuario = new CD_Usuario();
+        private CD_Usuario objcd_Usuario = new CD_Usuario();
 
-        private CD_Usuario _cdUsuario = new CD_Usuario();
+        private CN_Auditoria auditoriaNegocio = new CN_Auditoria();
+
+        public CN_Usuario()
+        {
+            objcd_Usuario.OnLoginAudit += Objcd_Usuario_OnLoginAudit;
+            objcd_Usuario.OnLogoutAudit += Objcd_Usuario_OnLogoutAudit;
+        }
+
+        private void Objcd_Usuario_OnLoginAudit(object sender, CD_Usuario.AuditoriaEventArgs e)
+        {
+            auditoriaNegocio.RegistrarAuditoria(e.Tabla, e.Operacion, e.UsuarioID, e.ValorAnterior, e.ValorNuevo);
+        }
+
+        private void Objcd_Usuario_OnLogoutAudit(object sender, CD_Usuario.AuditoriaEventArgs e)
+        {
+            auditoriaNegocio.RegistrarAuditoria(e.Tabla, e.Operacion, e.UsuarioID, e.ValorAnterior, e.ValorNuevo);
+        }
+
+        public Usuario IniciarSesion(string correo, string clave)
+        {
+            return objcd_Usuario.IniciarSesion(correo, clave);
+        }
+
+        public void CerrarSesion(int usuarioID)
+        {
+            objcd_Usuario.CerrarSesion(usuarioID);
+        }
 
         public List<Usuario> Listar()
         {
-            return _cdUsuario.Listar();
+            return cdUsuario.Listar();
         }
+
 
         public Usuario ObtenerUsuarioPorDocumento(string Documento)
         {
