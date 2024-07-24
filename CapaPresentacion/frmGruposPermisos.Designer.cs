@@ -43,7 +43,7 @@
             this.colSeleccionar});
             this.dgvGruposPermisos.Location = new System.Drawing.Point(12, 12);
             this.dgvGruposPermisos.Name = "dgvGruposPermisos";
-            this.dgvGruposPermisos.Size = new System.Drawing.Size(360, 150);
+            this.dgvGruposPermisos.Size = new System.Drawing.Size(360, 342);
             this.dgvGruposPermisos.TabIndex = 0;
             // 
             // colIdGrupoPermiso
@@ -66,7 +66,7 @@
             // 
             // btnAgregar
             // 
-            this.btnAgregar.Location = new System.Drawing.Point(12, 180);
+            this.btnAgregar.Location = new System.Drawing.Point(63, 372);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(75, 23);
             this.btnAgregar.TabIndex = 1;
@@ -76,7 +76,7 @@
             // 
             // btnEditar
             // 
-            this.btnEditar.Location = new System.Drawing.Point(93, 180);
+            this.btnEditar.Location = new System.Drawing.Point(144, 372);
             this.btnEditar.Name = "btnEditar";
             this.btnEditar.Size = new System.Drawing.Size(75, 23);
             this.btnEditar.TabIndex = 2;
@@ -86,7 +86,7 @@
             // 
             // btnEliminar
             // 
-            this.btnEliminar.Location = new System.Drawing.Point(174, 180);
+            this.btnEliminar.Location = new System.Drawing.Point(225, 372);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(75, 23);
             this.btnEliminar.TabIndex = 3;
@@ -96,7 +96,7 @@
             // 
             // frmGruposPermisos
             // 
-            this.ClientSize = new System.Drawing.Size(384, 261);
+            this.ClientSize = new System.Drawing.Size(551, 506);
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnAgregar);
@@ -106,6 +106,7 @@
             this.Load += new System.EventHandler(this.frmGruposPermisos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGruposPermisos)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion

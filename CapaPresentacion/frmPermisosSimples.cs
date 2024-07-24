@@ -23,6 +23,15 @@ namespace CapaPresentacion
             cbUsuarios.DataSource = usuarios;
             cbUsuarios.DisplayMember = "NombreCompleto";
             cbUsuarios.ValueMember = "IdUsuario";
+
+            // Seleccionar el primer usuario y cargar sus permisos
+            if (usuarios.Count > 0)
+            {
+                cbUsuarios.SelectedIndex = 0;
+                idUsuarioSeleccionado = (int)cbUsuarios.SelectedValue;
+                CargarPermisos();
+                CargarGruposPermisos();
+            }
         }
 
         private void cbUsuarios_SelectedIndexChanged(object sender, EventArgs e)

@@ -237,7 +237,83 @@ namespace CapaDatos
             return oLista;
         }
 
+        public List<Venta> ListarVentas(string filtroCliente, DateTime? fechaInicio, DateTime? fechaFin)
+        {
+            List<Venta> ventas = new List<Venta>();
 
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                SqlCommand cmd = new SqlCommand("SP_ListarVentas", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FiltroCliente", filtroCliente ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaFin", fechaFin ?? (object)DBNull.Value);
+
+                conexion.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    ventas.Add(new Venta
+                    {
+                        IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                        NombreCliente = dr["NombreCliente"].ToString(),
+                        MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                        FechaRegistro = Convert.ToDateTime(dr["FechaRegistro"]).ToString("yyyy-MM-dd"), // Conversión explícita a string
+                    });
+                }
+            }
+
+            return ventas;
+        }
+
+        public Venta ObtenerVenta(int idVenta)
+        {
+            Venta venta = null;
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                SqlCommand cmd = new SqlCommand("SP_ObtenerVenta", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@IdVenta", idVenta);
+
+                conexion.Open();
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        venta = new Venta
+                        {
+                            IdVenta = Convert.ToInt32(dr["IdVenta"]),
+                            FechaRegistro = Convert.ToDateTime(dr["FechaRegistro"]).ToString("yyyy-MM-dd"), // Conversión explícita a string
+                            MontoTotal = Convert.ToDecimal(dr["MontoTotal"]),
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            oDetalle_Venta = new List<Detalle_Venta>()
+                        };
+                    }
+
+                    if (dr.NextResult())
+                    {
+                        while (dr.Read())
+                        {
+                            venta.oDetalle_Venta.Add(new Detalle_Venta
+                            {
+                                IdDetalleVenta = Convert.ToInt32(dr["IdDetalleVenta"]),
+                                oProducto = new Producto
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    Nombre = dr["NombreProducto"].ToString() // Asegurar
+                                },
+                                Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                                PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                                SubTotal = Convert.ToDecimal(dr["SubTotal"])
+                            });
+                        }
+                    }
+                }
+            }
+
+            return venta;
+        }
 
     }
 }

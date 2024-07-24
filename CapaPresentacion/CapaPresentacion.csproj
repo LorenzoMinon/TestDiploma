@@ -173,12 +173,6 @@
     <Compile Include="frmGruposPermisos.Designer.cs">
       <DependentUpon>frmGruposPermisos.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmNegocio.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmNegocio.Designer.cs">
-      <DependentUpon>frmNegocio.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmOrdenesDeCompra.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -313,9 +307,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmGruposPermisos.resx">
       <DependentUpon>frmGruposPermisos.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmNegocio.resx">
-      <DependentUpon>frmNegocio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmOrdenesDeCompra.resx">
       <DependentUpon>frmOrdenesDeCompra.cs</DependentUpon>

@@ -34,8 +34,7 @@ namespace CapaPresentacion
             txtfecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             txtidproducto.Text = "0";
 
-            txtpagocon.Text = "";
-            txtcambio.Text = "";
+
             txttotalpagar.Text = "0";
         }
 
@@ -256,24 +255,8 @@ namespace CapaPresentacion
                 return;
             }
 
-            decimal pagacon;
             decimal total = Convert.ToDecimal(txttotalpagar.Text);
-            if (txtpagocon.Text.Trim() == "")
-            {
-                txtpagocon.Text = "0";
-            }
-            if(decimal.TryParse(txtpagocon.Text.Trim(), out pagacon))
-            {
-                if(pagacon < total)
-                {
-                    txtcambio.Text = "0.00";
-                }
-                else
-                {
-                    decimal cambio = pagacon - total;
-                    txtcambio.Text = cambio.ToString("0.00");
-                }
-            }
+
         }
 
         private void txtpagocon_KeyDown(object sender, KeyEventArgs e)
@@ -338,8 +321,6 @@ namespace CapaPresentacion
                 NumeroDocumento = numeroDocumento,
                 DocumentoCliente = txtdocumentocliente.Text,
                 NombreCliente = txtnombrecliente.Text,
-                MontoPago = Convert.ToDecimal(txtpagocon.Text),
-                MontoCambio = Convert.ToDecimal(txtcambio.Text),
                 MontoTotal = Convert.ToDecimal(txttotalpagar.Text)
             };
 
@@ -358,8 +339,7 @@ namespace CapaPresentacion
                 txtnombrecliente.Text = "";
                 dgvdata.Rows.Clear();
                 calcularTotal();
-                txtpagocon.Text = "";
-                txtcambio.Text = "";
+
             }
             else
                 MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

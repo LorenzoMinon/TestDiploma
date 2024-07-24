@@ -106,5 +106,74 @@ namespace CapaDatos
 
             return lista;
         }
+        public List<ReporteVentaPorCliente> ObtenerReporteVentasPorCliente()
+        {
+            List<ReporteVentaPorCliente> lista = new List<ReporteVentaPorCliente>();
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_ReporteVentasPorCliente", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new ReporteVentaPorCliente()
+                            {
+                                Cliente = dr["Cliente"].ToString(),
+                                TotalVendido = Convert.ToDecimal(dr["TotalVendido"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<ReporteVentaPorCliente>();
+                    // Manejar errores
+                    throw new Exception("Error al obtener el reporte de ventas por cliente: " + ex.Message);
+                }
+            }
+
+            return lista;
+        }
+
+        public List<ReporteProductoMasVendido> ObtenerReporteProductosMasVendidos()
+        {
+            List<ReporteProductoMasVendido> lista = new List<ReporteProductoMasVendido>();
+
+            using (SqlConnection conexion = new SqlConnection(Conexion.Instancia.Cadena))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SP_ReporteProductosMasVendidos", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    conexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new ReporteProductoMasVendido()
+                            {
+                                Producto = dr["Producto"].ToString(),
+                                CantidadVendida = Convert.ToInt32(dr["CantidadVendida"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<ReporteProductoMasVendido>();
+                    // Manejar errores
+                    throw new Exception("Error al obtener el reporte de productos más vendidos: " + ex.Message);
+                }
+            }
+
+            return lista;
+        }
     }
 }

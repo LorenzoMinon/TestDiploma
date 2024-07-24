@@ -248,15 +248,39 @@ namespace CapaDatos
 
         public void EliminarGrupoPermiso(int idGrupoPermiso)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(Conexion.Instancia.Cadena))
             {
-                string query = "DELETE FROM GruposPermisos WHERE IdGrupoPermiso = @IdGrupoPermiso";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
-                connection.Open();
-                command.ExecuteNonQuery();
+                con.Open();
+
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    try
+                    {
+                        // Eliminar las referencias en GruposPermisosDetalles
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM GruposPermisosDetalles WHERE IdGrupoPermiso = @IdGrupoPermiso", con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Eliminar el grupo de permisos
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM GruposPermisos WHERE IdGrupoPermiso = @IdGrupoPermiso", con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
+
 
         public GrupoPermiso ObtenerGrupoPermisoPorId(int idGrupoPermiso)
         {

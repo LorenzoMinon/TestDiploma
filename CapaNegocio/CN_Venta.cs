@@ -13,6 +13,15 @@ namespace CapaNegocio
     {
         private CD_Venta objcd_venta = new CD_Venta();
 
+        public List<Venta> ListarVentas(string filtroCliente = "", DateTime? fechaInicio = null, DateTime? fechaFin = null)
+        {
+            return objcd_venta.ListarVentas(filtroCliente, fechaInicio, fechaFin);
+        }
+
+        public Venta ObtenerVenta(int idVenta)
+        {
+            return objcd_venta.ObtenerVenta(idVenta);
+        }
         public bool RestarStock(int idproducto, int cantidad)
         {
             return objcd_venta.RestarStock(idproducto, cantidad);

@@ -1,6 +1,7 @@
 ﻿using CapaDatos;
 using CapaEntidad;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CapaNegocio
 {
@@ -21,6 +22,17 @@ namespace CapaNegocio
         public List<ReporteGananciaPotencialPorProducto> ObtenerReporteGananciaPotencialPorProducto()
         {
             return objcd_Reporte.ReporteGananciaPotencialPorProducto();
+        }
+        // Método para obtener el reporte de ventas por cliente
+        public List<ReporteVentaPorCliente> ObtenerReporteVentasPorCliente()
+        {
+            return objcd_Reporte.ObtenerReporteVentasPorCliente();
+        }
+
+        // Método para obtener el reporte de productos más vendidos
+        public List<ReporteProductoMasVendido> ObtenerReporteProductosMasVendidos()
+        {
+            return objcd_Reporte.ObtenerReporteProductosMasVendidos();
         }
     }
 }

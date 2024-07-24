@@ -58,7 +58,8 @@
     <Compile Include="ReporteGananciaPotencialPorProducto.cs" />
     <Compile Include="ReporteCantidadCompradaPorProducto.cs" />
     <Compile Include="ReporteComprasPorProveedor.cs" />
-    <Compile Include="ReporteVentasPorProducto.cs" />
+    <Compile Include="ReporteProductoMasVendido.cs" />
+    <Compile Include="ReporteVentaPorCliente.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="Venta.cs" />
   </ItemGroup>

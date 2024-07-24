@@ -140,11 +140,6 @@ namespace CapaPresentacion
             AbrirFormulario((IconMenuItem)sender, new frmReportes());
         }
 
-        private void submenunegocio_Click(object sender, EventArgs e)
-        {
-            AbrirFormulario(menumantenedor, new frmNegocio());
-        }
-
         private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AbrirFormulario(menureportes, new frmReporteCompras());
@@ -184,6 +179,16 @@ namespace CapaPresentacion
         {
             CN_Usuario usuarioNegocio = new CN_Usuario();
             usuarioNegocio.CerrarSesion(usuarioActual.IdUsuario);
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblusuario_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
