@@ -65,7 +65,7 @@
             this.dgvProductosMasVendidos.Margin = new System.Windows.Forms.Padding(2);
             this.dgvProductosMasVendidos.Name = "dgvProductosMasVendidos";
             this.dgvProductosMasVendidos.RowTemplate.Height = 24;
-            this.dgvProductosMasVendidos.Size = new System.Drawing.Size(623, 278);
+            this.dgvProductosMasVendidos.Size = new System.Drawing.Size(623, 123);
             this.dgvProductosMasVendidos.TabIndex = 2;
             // 
             // chartProductosMasVendidos

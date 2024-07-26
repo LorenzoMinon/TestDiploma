@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
+using BCrypt.Net;
 using CapaDatos;
 using CapaEntidad;
 namespace CapaNegocio
@@ -48,6 +49,7 @@ namespace CapaNegocio
         {
             return cdUsuario.Listar();
         }
+
 
 
         public Usuario ObtenerUsuarioPorDocumento(string Documento)
@@ -174,5 +176,19 @@ namespace CapaNegocio
         {
             return cdUsuario.ActualizarClave(idUsuario, nuevaClave);
         }
+        public void ActualizarContraseñasExistentes()
+        {
+            List<Usuario> usuarios = Listar(); // Obtiene todos los usuarios
+            foreach (var usuario in usuarios)
+            {
+                if (!string.IsNullOrEmpty(usuario.Clave))
+                {
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(usuario.Clave);
+                    ActualizarClave(usuario.IdUsuario, hashedPassword); // Llama al método de CD_Usuario
+                }
+            }
+        }
+
+
     }
 }

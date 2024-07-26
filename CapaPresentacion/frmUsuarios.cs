@@ -12,6 +12,7 @@ using CapaPresentacion.Utilidades;
 using CapaEntidad;
 using CapaNegocio;
 using CapaPresentacion.Modales;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CapaPresentacion
 {
@@ -57,7 +58,7 @@ namespace CapaPresentacion
                 NombreCompleto = txtnombrecompleto.Text,
                 Correo = txtcorreo.Text,
                 Clave = txtclave.Text,
-                Estado = true // Assuming all users are active, modify this as needed
+
             };
 
             if (objusuario.IdUsuario == 0)
@@ -66,10 +67,9 @@ namespace CapaPresentacion
 
                 if (idusuariogenerado != 0)
                 {
-                    dgvdata.Rows.Add(new object[] {
-                        "", idusuariogenerado, txtdocumento.Text, txtnombrecompleto.Text, txtcorreo.Text, txtclave.Text,
-                        1, "Activo" // Default values for the new user
-                    });
+
+                    dgvdata.Rows.Add(new object[] {"",idusuariogenerado,txtdocumento.Text,txtnombrecompleto.Text,txtcorreo.Text,txtclave.Text
+                });
 
                     Limpiar();
                 }
@@ -77,6 +77,8 @@ namespace CapaPresentacion
                 {
                     MessageBox.Show(mensaje);
                 }
+
+
             }
             else
             {
@@ -90,8 +92,7 @@ namespace CapaPresentacion
                     row.Cells["NombreCompleto"].Value = txtnombrecompleto.Text;
                     row.Cells["Correo"].Value = txtcorreo.Text;
                     row.Cells["Clave"].Value = txtclave.Text;
-                    row.Cells["EstadoValor"].Value = 1; // Assuming all users are active, modify this as needed
-                    row.Cells["Estado"].Value = "Activo"; // Default value for the user
+
 
                     Limpiar();
                 }
@@ -100,8 +101,12 @@ namespace CapaPresentacion
                     MessageBox.Show(mensaje);
                 }
             }
-        }
 
+
+
+
+
+        }
         private void Limpiar()
         {
             txtindice.Text = "-1";
@@ -111,9 +116,9 @@ namespace CapaPresentacion
             txtcorreo.Text = "";
             txtclave.Text = "";
             txtconfirmarclave.Text = "";
-
             txtdocumento.Select();
         }
+
 
         private void dgvdata_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
