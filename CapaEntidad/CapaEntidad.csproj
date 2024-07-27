@@ -61,7 +61,6 @@
     <Compile Include="Categoria.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="Compra.cs" />
-    <Compile Include="Cuenta.cs" />
     <Compile Include="Detalle_Compra.cs" />
     <Compile Include="Detalle_Venta.cs" />
     <Compile Include="GrupoPermiso.cs" />
