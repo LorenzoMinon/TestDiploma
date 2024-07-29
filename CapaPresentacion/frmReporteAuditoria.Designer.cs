@@ -3,6 +3,7 @@
     partial class frmReporteAuditoria
     {
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.DataGridView dgvAuditorias;
 
         protected override void Dispose(bool disposing)
         {
@@ -15,35 +16,32 @@
 
         private void InitializeComponent()
         {
-            this.dgvAuditoria = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAuditoria)).BeginInit();
+            this.dgvAuditorias = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAuditorias)).BeginInit();
             this.SuspendLayout();
+
             // 
-            // dgvAuditoria
+            // dgvAuditorias
             // 
-            this.dgvAuditoria.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAuditoria.Location = new System.Drawing.Point(9, 10);
-            this.dgvAuditoria.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.dgvAuditoria.Name = "dgvAuditoria";
-            this.dgvAuditoria.RowTemplate.Height = 24;
-            this.dgvAuditoria.Size = new System.Drawing.Size(864, 449);
-            this.dgvAuditoria.TabIndex = 0;
+            this.dgvAuditorias.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAuditorias.Location = new System.Drawing.Point(12, 12);
+            this.dgvAuditorias.Name = "dgvAuditorias";
+            this.dgvAuditorias.Size = new System.Drawing.Size(760, 400);
+            this.dgvAuditorias.TabIndex = 0;
+            this.dgvAuditorias.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAuditorias_CellClick);
+
             // 
             // frmReporteAuditoria
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 459);
-            this.Controls.Add(this.dgvAuditoria);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.dgvAuditorias);
             this.Name = "frmReporteAuditoria";
             this.Text = "Reporte de Auditoría";
             this.Load += new System.EventHandler(this.frmReporteAuditoria_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAuditoria)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAuditorias)).EndInit();
             this.ResumeLayout(false);
-
         }
-
-        private System.Windows.Forms.DataGridView dgvAuditoria;
     }
 }
