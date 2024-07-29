@@ -43,36 +43,28 @@ namespace CapaPresentacion
                 CargarGruposPermisos();
             }
         }
-
-        //private void CargarPermisos()
-        //{
-        //    var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
-
-        //    dgvPermisos.Rows.Clear();
-
-        //    foreach (var permiso in permisosSimples)
-        //    {
-        //        dgvPermisos.Rows.Add(permiso.Nombre, permiso.Asignado);
-        //    }
-        //}
         private void CargarPermisos()
         {
-            var permisos = permisoService.ObtenerTodosLosPermisos();
+            // Obtener todos los permisos junto con su estado de asignación para el usuario seleccionado
+            var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
+            var gruposPermisos = permisoService.ListarGruposPermisosConEstado(idUsuarioSeleccionado);
+
             dgvPermisos.Rows.Clear();
             dgvGruposPermisos.Rows.Clear();
 
-            foreach (var permiso in permisos)
+            // Cargar permisos simples en el DataGridView
+            foreach (var permiso in permisosSimples)
             {
-                if (permiso is PermisoSimple simple)
-                {
-                    dgvPermisos.Rows.Add(simple.Nombre, simple.Asignado);
-                }
-                else if (permiso is GrupoPermiso grupo)
-                {
-                    dgvGruposPermisos.Rows.Add(grupo.Nombre, grupo.Asignado);
-                }
+                dgvPermisos.Rows.Add(permiso.Nombre, permiso.Asignado);
+            }
+
+            // Cargar grupos de permisos en el DataGridView
+            foreach (var grupo in gruposPermisos)
+            {
+                dgvGruposPermisos.Rows.Add(grupo.Nombre, grupo.Asignado);
             }
         }
+
 
 
 
@@ -198,6 +190,11 @@ namespace CapaPresentacion
             }
 
             MessageBox.Show("Permisos actualizados correctamente.");
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

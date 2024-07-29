@@ -16,9 +16,6 @@ namespace CapaPresentacion
         public Login()
         {
             InitializeComponent();
-
-            //cN_Usuario.ActualizarContraseñasExistentes(); esto se aplico una vez. 
-
         }
 
         private void btncancelar_Click(object sender, EventArgs e)

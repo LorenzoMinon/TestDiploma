@@ -228,23 +228,6 @@ namespace CapaPresentacion
             }
         }
 
-        private void txtpagocon_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Permitir dígitos y control de teclas (borrar, copiar, pegar)
-            if (Char.IsDigit(e.KeyChar) || Char.IsControl(e.KeyChar))
-            {
-                e.Handled = false;
-            }
-            // Permitir el punto decimal solo si el campo está vacío
-            else if (e.KeyChar == ',')
-            {
-                e.Handled = false;
-            }
-            else
-            {
-                e.Handled = true; // Bloquear cualquier otro carácter
-            }
-        }
 
         private void CalcularCambio()
         {
@@ -258,13 +241,6 @@ namespace CapaPresentacion
 
         }
 
-        private void txtpagocon_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.KeyData == Keys.Enter)
-            {
-                CalcularCambio();
-            }
-        }
         private void btncrearventa_Click(object sender, EventArgs e)
         {
 

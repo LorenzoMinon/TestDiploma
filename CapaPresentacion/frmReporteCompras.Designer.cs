@@ -22,12 +22,12 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.dgvComprasPorProveedor = new System.Windows.Forms.DataGridView();
             this.chartComprasPorProveedor = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dgvCantidadCompradaPorProducto = new System.Windows.Forms.DataGridView();
@@ -55,10 +55,10 @@
             // 
             // chartComprasPorProveedor
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartComprasPorProveedor.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartComprasPorProveedor.Legends.Add(legend1);
+            chartArea4.Name = "ChartArea1";
+            this.chartComprasPorProveedor.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chartComprasPorProveedor.Legends.Add(legend4);
             this.chartComprasPorProveedor.Location = new System.Drawing.Point(11, 138);
             this.chartComprasPorProveedor.Margin = new System.Windows.Forms.Padding(2);
             this.chartComprasPorProveedor.Name = "chartComprasPorProveedor";
@@ -69,25 +69,26 @@
             // dgvCantidadCompradaPorProducto
             // 
             this.dgvCantidadCompradaPorProducto.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCantidadCompradaPorProducto.Location = new System.Drawing.Point(650, 12);
+            this.dgvCantidadCompradaPorProducto.Location = new System.Drawing.Point(613, 12);
             this.dgvCantidadCompradaPorProducto.Margin = new System.Windows.Forms.Padding(2);
             this.dgvCantidadCompradaPorProducto.Name = "dgvCantidadCompradaPorProducto";
             this.dgvCantidadCompradaPorProducto.RowTemplate.Height = 24;
-            this.dgvCantidadCompradaPorProducto.Size = new System.Drawing.Size(582, 122);
+            this.dgvCantidadCompradaPorProducto.Size = new System.Drawing.Size(246, 332);
             this.dgvCantidadCompradaPorProducto.TabIndex = 2;
             // 
             // chartCantidadCompradaPorProducto
             // 
-            chartArea2.Name = "ChartArea2";
-            this.chartCantidadCompradaPorProducto.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend2";
-            this.chartCantidadCompradaPorProducto.Legends.Add(legend2);
-            this.chartCantidadCompradaPorProducto.Location = new System.Drawing.Point(650, 139);
+            chartArea5.Name = "ChartArea2";
+            this.chartCantidadCompradaPorProducto.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend2";
+            this.chartCantidadCompradaPorProducto.Legends.Add(legend5);
+            this.chartCantidadCompradaPorProducto.Location = new System.Drawing.Point(863, 12);
             this.chartCantidadCompradaPorProducto.Margin = new System.Windows.Forms.Padding(2);
             this.chartCantidadCompradaPorProducto.Name = "chartCantidadCompradaPorProducto";
-            this.chartCantidadCompradaPorProducto.Size = new System.Drawing.Size(582, 205);
+            this.chartCantidadCompradaPorProducto.Size = new System.Drawing.Size(377, 332);
             this.chartCantidadCompradaPorProducto.TabIndex = 3;
             this.chartCantidadCompradaPorProducto.Text = "chart2";
+            this.chartCantidadCompradaPorProducto.Click += new System.EventHandler(this.chartCantidadCompradaPorProducto_Click);
             // 
             // dgvGananciaPotencialPorProducto
             // 
@@ -96,28 +97,28 @@
             this.dgvGananciaPotencialPorProducto.Margin = new System.Windows.Forms.Padding(2);
             this.dgvGananciaPotencialPorProducto.Name = "dgvGananciaPotencialPorProducto";
             this.dgvGananciaPotencialPorProducto.RowTemplate.Height = 24;
-            this.dgvGananciaPotencialPorProducto.Size = new System.Drawing.Size(582, 211);
+            this.dgvGananciaPotencialPorProducto.Size = new System.Drawing.Size(282, 211);
             this.dgvGananciaPotencialPorProducto.TabIndex = 4;
             // 
             // chartGananciaPotencialPorProducto
             // 
-            chartArea3.Name = "ChartArea3";
-            this.chartGananciaPotencialPorProducto.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend3";
-            this.chartGananciaPotencialPorProducto.Legends.Add(legend3);
-            this.chartGananciaPotencialPorProducto.Location = new System.Drawing.Point(650, 348);
+            chartArea6.Name = "ChartArea3";
+            this.chartGananciaPotencialPorProducto.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend3";
+            this.chartGananciaPotencialPorProducto.Legends.Add(legend6);
+            this.chartGananciaPotencialPorProducto.Location = new System.Drawing.Point(297, 348);
             this.chartGananciaPotencialPorProducto.Margin = new System.Windows.Forms.Padding(2);
             this.chartGananciaPotencialPorProducto.Name = "chartGananciaPotencialPorProducto";
-            this.chartGananciaPotencialPorProducto.Size = new System.Drawing.Size(582, 211);
+            this.chartGananciaPotencialPorProducto.Size = new System.Drawing.Size(943, 211);
             this.chartGananciaPotencialPorProducto.TabIndex = 5;
             this.chartGananciaPotencialPorProducto.Text = "chart3";
             // 
             // btnExportarExcel
             // 
-            this.btnExportarExcel.Location = new System.Drawing.Point(1236, 367);
+            this.btnExportarExcel.Location = new System.Drawing.Point(1260, 535);
             this.btnExportarExcel.Margin = new System.Windows.Forms.Padding(2);
             this.btnExportarExcel.Name = "btnExportarExcel";
-            this.btnExportarExcel.Size = new System.Drawing.Size(112, 24);
+            this.btnExportarExcel.Size = new System.Drawing.Size(95, 24);
             this.btnExportarExcel.TabIndex = 6;
             this.btnExportarExcel.Text = "Exportar a Excel";
             this.btnExportarExcel.UseVisualStyleBackColor = true;

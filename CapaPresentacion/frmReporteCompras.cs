@@ -50,7 +50,6 @@ namespace CapaPresentacion
                 series.Points.AddXY(reporte.Proveedor, reporte.TotalComprado);
             }
         }
-
         private void CargarCantidadCompradaPorProducto()
         {
             var reportes = reporteNegocio.ObtenerReporteCantidadCompradaPorProducto();
@@ -60,11 +59,15 @@ namespace CapaPresentacion
                 r.CantidadComprada
             }).ToList();
 
+            // Calcular el total de cantidades compradas
+            double total = reportes.Sum(r => r.CantidadComprada);
+            double umbral = total * 0.07; // 7% del total
+
             // Configurar el gráfico
             chartCantidadCompradaPorProducto.Series.Clear();
             Series series = new Series("Cantidad Comprada")
             {
-                ChartType = SeriesChartType.Column,
+                ChartType = SeriesChartType.Pie,
                 XValueType = ChartValueType.String,
                 YValueType = ChartValueType.Double
             };
@@ -73,9 +76,26 @@ namespace CapaPresentacion
 
             foreach (var reporte in reportes)
             {
-                series.Points.AddXY(reporte.Producto, reporte.CantidadComprada);
+                int pointIndex = series.Points.AddXY(reporte.Producto, reporte.CantidadComprada);
+
+                // Determinar si el valor supera el umbral del 7%
+                if (reporte.CantidadComprada > umbral)
+                {
+                    series.Points[pointIndex].Label = $"{reporte.Producto}: {reporte.CantidadComprada}";
+                }
+                else
+                {
+                    // Establecer la etiqueta como transparente para que no se muestre en el gráfico
+                    series.Points[pointIndex].Label = $"{reporte.Producto}: {reporte.CantidadComprada}";
+                    series.Points[pointIndex].LabelForeColor = System.Drawing.Color.Transparent;
+                }
             }
+
+            // Actualizar el gráfico para reflejar cambios
+            chartCantidadCompradaPorProducto.Invalidate();
         }
+
+
 
         private void CargarGananciaPotencialPorProducto()
         {
@@ -148,6 +168,11 @@ namespace CapaPresentacion
                 }
             }
             return dt;
+        }
+
+        private void chartCantidadCompradaPorProducto_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

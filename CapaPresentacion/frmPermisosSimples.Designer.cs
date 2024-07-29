@@ -151,6 +151,7 @@
             this.label10.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.label10.Size = new System.Drawing.Size(860, 522);
             this.label10.TabIndex = 97;
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // frmPermisosSimples
             // 

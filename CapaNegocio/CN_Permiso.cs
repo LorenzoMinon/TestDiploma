@@ -46,26 +46,12 @@ namespace CapaNegocio
 
         public void AsignarGrupoPermisoAUsuario(int idUsuario, int idGrupoPermiso)
         {
-            var grupo = cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
-            if (grupo != null)
-            {
-                foreach (var permiso in grupo.ObtenerPermisos())
-                {
-                    AsignarPermisoAUsuario(idUsuario, permiso.Id);
-                }
-            }
+            cdPermiso.AsignarGrupoPermisoAUsuario(idUsuario, idGrupoPermiso);
         }
 
         public void RevocarGrupoPermisoDeUsuario(int idUsuario, int idGrupoPermiso)
         {
-            var grupo = cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
-            if (grupo != null)
-            {
-                foreach (var permiso in grupo.ObtenerPermisos())
-                {
-                    RevocarPermisoDeUsuario(idUsuario, permiso.Id);
-                }
-            }
+            cdPermiso.RevocarGrupoPermisoDeUsuario(idUsuario, idGrupoPermiso);
         }
 
         public List<PermisoSimple> ListarPermisos()

@@ -137,7 +137,7 @@ namespace CapaPresentacion
 
         private void menureportes_Click(object sender, EventArgs e)
         {
-            AbrirFormulario((IconMenuItem)sender, new frmReportes());
+            AbrirFormulario((IconMenuItem)sender, new frmReporteCompras());
         }
 
         private void reporteToolStripMenuItem_Click(object sender, EventArgs e)
