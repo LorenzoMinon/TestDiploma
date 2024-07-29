@@ -387,38 +387,18 @@ namespace CapaDatos
         {
             List<IPermiso> permisos = new List<IPermiso>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var permisosSimples = ListarPermisos();
+            permisos.AddRange(permisosSimples);
+
+            var gruposPermisos = ListarGruposPermisos();
+            foreach (var grupo in gruposPermisos)
             {
-                string query = "SELECT IdPermiso, Nombre FROM Permisos";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                var permisosDelGrupo = ListarPermisosConEstadoParaGrupo(grupo.Id);
+                foreach (var permiso in permisosDelGrupo)
                 {
-                    permisos.Add(new PermisoSimple
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    });
+                    grupo.Agregar(permiso);
                 }
-            }
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT IdGrupoPermiso, NombreGrupoPermiso FROM GruposPermisos";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    permisos.Add(new GrupoPermiso
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    });
-                }
+                permisos.Add(grupo);
             }
 
             return permisos;

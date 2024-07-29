@@ -9,6 +9,7 @@ namespace CapaNegocio
         private CD_Permiso cdPermiso = new CD_Permiso();
 
         // Métodos existentes
+
         public List<PermisoSimple> ListarPermisosConEstado(int idUsuario)
         {
             return cdPermiso.ListarPermisosConEstado(idUsuario);
@@ -29,6 +30,10 @@ namespace CapaNegocio
             return cdPermiso.ObtenerGrupoPermisoPorNombre(nombre);
         }
 
+        public List<IPermiso> ObtenerTodosLosPermisos()
+        {
+            return cdPermiso.ObtenerTodosLosPermisos();
+        }
         public void AsignarPermisoAUsuario(int idUsuario, int idPermiso)
         {
             cdPermiso.AsignarPermisoAUsuario(idUsuario, idPermiso);
@@ -41,12 +46,26 @@ namespace CapaNegocio
 
         public void AsignarGrupoPermisoAUsuario(int idUsuario, int idGrupoPermiso)
         {
-            cdPermiso.AsignarGrupoPermisoAUsuario(idUsuario, idGrupoPermiso);
+            var grupo = cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
+            if (grupo != null)
+            {
+                foreach (var permiso in grupo.ObtenerPermisos())
+                {
+                    AsignarPermisoAUsuario(idUsuario, permiso.Id);
+                }
+            }
         }
 
         public void RevocarGrupoPermisoDeUsuario(int idUsuario, int idGrupoPermiso)
         {
-            cdPermiso.RevocarGrupoPermisoDeUsuario(idUsuario, idGrupoPermiso);
+            var grupo = cdPermiso.ObtenerGrupoPermisoPorId(idGrupoPermiso);
+            if (grupo != null)
+            {
+                foreach (var permiso in grupo.ObtenerPermisos())
+                {
+                    RevocarPermisoDeUsuario(idUsuario, permiso.Id);
+                }
+            }
         }
 
         public List<PermisoSimple> ListarPermisos()
@@ -92,12 +111,6 @@ namespace CapaNegocio
         public void RevocarPermisoDeGrupo(int idGrupoPermiso, int idPermiso)
         {
             cdPermiso.RevocarPermisoDeGrupo(idGrupoPermiso, idPermiso);
-        }
-
-        // Métodos para el patrón Composite
-        public List<IPermiso> ObtenerTodosLosPermisos()
-        {
-            return cdPermiso.ObtenerTodosLosPermisos();
         }
     }
 }

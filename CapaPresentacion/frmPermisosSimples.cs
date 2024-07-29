@@ -44,17 +44,38 @@ namespace CapaPresentacion
             }
         }
 
+        //private void CargarPermisos()
+        //{
+        //    var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
+
+        //    dgvPermisos.Rows.Clear();
+
+        //    foreach (var permiso in permisosSimples)
+        //    {
+        //        dgvPermisos.Rows.Add(permiso.Nombre, permiso.Asignado);
+        //    }
+        //}
         private void CargarPermisos()
         {
-            var permisosSimples = permisoService.ListarPermisosConEstado(idUsuarioSeleccionado);
-
+            var permisos = permisoService.ObtenerTodosLosPermisos();
             dgvPermisos.Rows.Clear();
+            dgvGruposPermisos.Rows.Clear();
 
-            foreach (var permiso in permisosSimples)
+            foreach (var permiso in permisos)
             {
-                dgvPermisos.Rows.Add(permiso.Nombre, permiso.Asignado);
+                if (permiso is PermisoSimple simple)
+                {
+                    dgvPermisos.Rows.Add(simple.Nombre, simple.Asignado);
+                }
+                else if (permiso is GrupoPermiso grupo)
+                {
+                    dgvGruposPermisos.Rows.Add(grupo.Nombre, grupo.Asignado);
+                }
             }
         }
+
+
+
 
         private void CargarGruposPermisos()
         {
@@ -110,6 +131,25 @@ namespace CapaPresentacion
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            //foreach (DataGridViewRow row in dgvPermisos.Rows)
+            //{
+            //    if (row.Cells["colAsignadoPermiso"].Value != null && row.Cells["colNombrePermiso"].Value != null)
+            //    {
+            //        bool asignado = Convert.ToBoolean(row.Cells["colAsignadoPermiso"].Value);
+            //        string nombrePermiso = row.Cells["colNombrePermiso"].Value.ToString();
+
+            //        var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
+
+            //        if (asignado)
+            //        {
+            //            permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.Id);
+            //        }
+            //        else
+            //        {
+            //            permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.Id);
+            //        }
+            //    }
+            //}
             foreach (DataGridViewRow row in dgvPermisos.Rows)
             {
                 if (row.Cells["colAsignadoPermiso"].Value != null && row.Cells["colNombrePermiso"].Value != null)
@@ -119,17 +159,24 @@ namespace CapaPresentacion
 
                     var permiso = permisoService.ObtenerPermisoPorNombre(nombrePermiso);
 
-                    if (asignado)
+                    if (permiso != null)
                     {
-                        permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.Id);
+                        if (asignado)
+                        {
+                            permisoService.AsignarPermisoAUsuario(idUsuarioSeleccionado, permiso.Id);
+                        }
+                        else
+                        {
+                            permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.Id);
+                        }
                     }
                     else
                     {
-                        permisoService.RevocarPermisoDeUsuario(idUsuarioSeleccionado, permiso.Id);
+                        // Manejo del caso en que el permiso no se encuentra
+                        MessageBox.Show($"Permiso '{nombrePermiso}' no encontrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-
             foreach (DataGridViewRow row in dgvGruposPermisos.Rows)
             {
                 if (row.Cells["colAsignadoGrupoPermiso"].Value != null && row.Cells["colNombreGrupoPermiso"].Value != null)

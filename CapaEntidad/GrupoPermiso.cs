@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace CapaEntidad
 {
@@ -8,30 +9,35 @@ namespace CapaEntidad
         public int Id { get; set; }
         public string Nombre { get; set; }
         public bool Asignado { get; set; }
-        public List<IPermiso> Permisos { get; set; }
+        private List<IPermiso> _permisos = new List<IPermiso>();
 
-        public GrupoPermiso()
+        public void Agregar(IPermiso permiso)
         {
-            Permisos = new List<IPermiso>();
+            _permisos.Add(permiso);
         }
 
-        public void AgregarPermiso(IPermiso permiso)
+        public void Eliminar(IPermiso permiso)
         {
-            Permisos.Add(permiso);
+            _permisos.Remove(permiso);
         }
 
-        public void EliminarPermiso(IPermiso permiso)
+        public IPermiso ObtenerPermiso(int id)
         {
-            Permisos.Remove(permiso);
+            return _permisos.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Mostrar()
+        public void MostrarDetalles()
         {
-            Console.WriteLine($"Grupo de Permiso: {Nombre}");
-            foreach (var permiso in Permisos)
+            Console.WriteLine($"Grupo: {Nombre}");
+            foreach (var permiso in _permisos)
             {
-                permiso.Mostrar();
+                permiso.MostrarDetalles();
             }
+        }
+
+        public List<IPermiso> ObtenerPermisos()
+        {
+            return _permisos;
         }
     }
 }
