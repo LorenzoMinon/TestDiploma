@@ -110,14 +110,14 @@
             // submenupermisossimples
             // 
             this.submenupermisossimples.Name = "submenupermisossimples";
-            this.submenupermisossimples.Size = new System.Drawing.Size(180, 22);
+            this.submenupermisossimples.Size = new System.Drawing.Size(179, 22);
             this.submenupermisossimples.Text = "Permisos simples";
             this.submenupermisossimples.Click += new System.EventHandler(this.submenupermisossimples_Click);
             // 
             // submenugruposdepermisos
             // 
             this.submenugruposdepermisos.Name = "submenugruposdepermisos";
-            this.submenugruposdepermisos.Size = new System.Drawing.Size(180, 22);
+            this.submenugruposdepermisos.Size = new System.Drawing.Size(179, 22);
             this.submenugruposdepermisos.Text = "Grupos de permisos";
             this.submenugruposdepermisos.Click += new System.EventHandler(this.submenugruposdepermisos_Click);
             // 
@@ -142,7 +142,7 @@
             this.submenucategoria.IconColor = System.Drawing.Color.Black;
             this.submenucategoria.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenucategoria.Name = "submenucategoria";
-            this.submenucategoria.Size = new System.Drawing.Size(180, 22);
+            this.submenucategoria.Size = new System.Drawing.Size(125, 22);
             this.submenucategoria.Text = "Categoria";
             this.submenucategoria.Click += new System.EventHandler(this.submenucategoria_Click);
             // 
@@ -152,7 +152,7 @@
             this.submenuproducto.IconColor = System.Drawing.Color.Black;
             this.submenuproducto.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.submenuproducto.Name = "submenuproducto";
-            this.submenuproducto.Size = new System.Drawing.Size(180, 22);
+            this.submenuproducto.Size = new System.Drawing.Size(125, 22);
             this.submenuproducto.Text = "Producto";
             this.submenuproducto.Click += new System.EventHandler(this.submenuproducto_Click);
             // 
@@ -270,14 +270,14 @@
             // reporteToolStripMenuItem
             // 
             this.reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
-            this.reporteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reporteToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.reporteToolStripMenuItem.Text = "Reporte Compras";
             this.reporteToolStripMenuItem.Click += new System.EventHandler(this.reporteToolStripMenuItem_Click);
             // 
             // reporteVentasToolStripMenuItem
             // 
             this.reporteVentasToolStripMenuItem.Name = "reporteVentasToolStripMenuItem";
-            this.reporteVentasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reporteVentasToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.reporteVentasToolStripMenuItem.Text = "Reporte Ventas";
             this.reporteVentasToolStripMenuItem.Click += new System.EventHandler(this.reporteVentasToolStripMenuItem_Click);
             // 
@@ -366,7 +366,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menu);
             this.Controls.Add(this.menutitulo);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menu;
+            this.MaximizeBox = false;
             this.Name = "Inicio";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.Inicio_Load);

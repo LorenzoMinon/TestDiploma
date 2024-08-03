@@ -71,25 +71,6 @@ namespace CapaPresentacion
         }
 
 
-        private void txtdocumento_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtclave_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-        }
-
         private void txtclave_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -104,10 +85,7 @@ namespace CapaPresentacion
             recuperarClaveForm.Show();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
 
-        }
 
 
     }

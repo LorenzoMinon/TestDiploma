@@ -10,7 +10,7 @@ namespace CapaDatos
     public class Conexion
     {
         // Instancia estática y de solo lectura de la propia clase
-        private static readonly Conexion instancia = new Conexion();
+        private static Conexion instancia;
 
         // Cadena de conexión
         public string Cadena { get; private set; }
@@ -26,6 +26,11 @@ namespace CapaDatos
         {
             get
             {
+                // Verificación para asegurar que solo hay una instancia
+                if (instancia == null)
+                {
+                    instancia = new Conexion();
+                }
                 return instancia;
             }
         }

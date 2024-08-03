@@ -50,7 +50,6 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(259, 316);
             this.label1.TabIndex = 0;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -70,7 +69,6 @@
             this.txtdocumento.Name = "txtdocumento";
             this.txtdocumento.Size = new System.Drawing.Size(192, 20);
             this.txtdocumento.TabIndex = 3;
-            this.txtdocumento.TextChanged += new System.EventHandler(this.txtdocumento_TextChanged);
             // 
             // txtclave
             // 
@@ -79,7 +77,6 @@
             this.txtclave.PasswordChar = '*';
             this.txtclave.Size = new System.Drawing.Size(192, 20);
             this.txtclave.TabIndex = 4;
-            this.txtclave.TextChanged += new System.EventHandler(this.txtclave_TextChanged);
             this.txtclave.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtclave_KeyPress);
             // 
             // label3
@@ -159,7 +156,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // Login
             // 
@@ -180,7 +176,6 @@
             this.Name = "Login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Login_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

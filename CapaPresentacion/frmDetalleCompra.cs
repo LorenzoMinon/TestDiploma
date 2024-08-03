@@ -88,9 +88,6 @@ namespace CapaPresentacion
             MessageBox.Show("Recepción confirmada y stock actualizado.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void frmDetalleCompra_Load(object sender, EventArgs e)
-        {
 
-        }
     }
 }

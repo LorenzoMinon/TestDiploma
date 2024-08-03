@@ -74,9 +74,9 @@ namespace CapaPresentacion
         {
             if (MenuActivo != null)
             {
-                MenuActivo.BackColor = Color.White;
+                MenuActivo.BackColor = Color.FromArgb(234, 228, 0);
             }
-            menu.BackColor = Color.Silver;
+            menu.BackColor = Color.Silver; //
             MenuActivo = menu;
 
             if (FormularioActivo != null)

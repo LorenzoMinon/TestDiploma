@@ -93,6 +93,7 @@
             // 
             this.txtTipoDocumento.Location = new System.Drawing.Point(23, 217);
             this.txtTipoDocumento.Name = "txtTipoDocumento";
+            this.txtTipoDocumento.ReadOnly = true;
             this.txtTipoDocumento.Size = new System.Drawing.Size(100, 20);
             this.txtTipoDocumento.TabIndex = 1;
             // 
@@ -100,6 +101,7 @@
             // 
             this.txtNumeroDocumento.Location = new System.Drawing.Point(129, 217);
             this.txtNumeroDocumento.Name = "txtNumeroDocumento";
+            this.txtNumeroDocumento.ReadOnly = true;
             this.txtNumeroDocumento.Size = new System.Drawing.Size(100, 20);
             this.txtNumeroDocumento.TabIndex = 2;
             // 
@@ -107,6 +109,7 @@
             // 
             this.txtFecha.Location = new System.Drawing.Point(235, 217);
             this.txtFecha.Name = "txtFecha";
+            this.txtFecha.ReadOnly = true;
             this.txtFecha.Size = new System.Drawing.Size(100, 20);
             this.txtFecha.TabIndex = 3;
             // 
@@ -114,6 +117,7 @@
             // 
             this.txtUsuario.Location = new System.Drawing.Point(341, 217);
             this.txtUsuario.Name = "txtUsuario";
+            this.txtUsuario.ReadOnly = true;
             this.txtUsuario.Size = new System.Drawing.Size(100, 20);
             this.txtUsuario.TabIndex = 4;
             // 
@@ -121,6 +125,7 @@
             // 
             this.txtNumeroDocumentoProveedor.Location = new System.Drawing.Point(447, 217);
             this.txtNumeroDocumentoProveedor.Name = "txtNumeroDocumentoProveedor";
+            this.txtNumeroDocumentoProveedor.ReadOnly = true;
             this.txtNumeroDocumentoProveedor.Size = new System.Drawing.Size(100, 20);
             this.txtNumeroDocumentoProveedor.TabIndex = 5;
             // 
@@ -128,6 +133,7 @@
             // 
             this.txtRazonSocial.Location = new System.Drawing.Point(553, 217);
             this.txtRazonSocial.Name = "txtRazonSocial";
+            this.txtRazonSocial.ReadOnly = true;
             this.txtRazonSocial.Size = new System.Drawing.Size(100, 20);
             this.txtRazonSocial.TabIndex = 6;
             // 
@@ -135,6 +141,7 @@
             // 
             this.txtMontoTotal.Location = new System.Drawing.Point(659, 217);
             this.txtMontoTotal.Name = "txtMontoTotal";
+            this.txtMontoTotal.ReadOnly = true;
             this.txtMontoTotal.Size = new System.Drawing.Size(100, 20);
             this.txtMontoTotal.TabIndex = 7;
             // 
