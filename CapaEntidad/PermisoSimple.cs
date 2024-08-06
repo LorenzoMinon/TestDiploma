@@ -2,30 +2,28 @@
 
 namespace CapaEntidad
 {
-    public class PermisoSimple : IPermiso
+    public class PermisoSimple : Component
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public bool Asignado { get; set; }
+        public PermisoSimple(int id, string nombre) : base(id, nombre) { }
 
-        public void MostrarDetalles()
+        public override void Add(Component component)
         {
-            Console.WriteLine($"Permiso: {Nombre}");
+            throw new InvalidOperationException("No se pueden agregar componentes a un PermisoSimple.");
         }
 
-        public void Agregar(IPermiso permiso)
+        public override void Remove(Component component)
         {
-            throw new InvalidOperationException("No se pueden agregar permisos a un permiso simple.");
+            throw new InvalidOperationException("No se pueden eliminar componentes de un PermisoSimple.");
         }
 
-        public void Eliminar(IPermiso permiso)
+        public override Component GetChild(int id)
         {
-            throw new InvalidOperationException("No se pueden eliminar permisos de un permiso simple.");
+            throw new NotImplementedException("Cannot get child from a leaf");
         }
 
-        public IPermiso ObtenerPermiso(int id)
+        public override void Display(int depth)
         {
-            return Id == id ? this : null;
+            Console.WriteLine(new String('-', depth) + Nombre);
         }
     }
 }

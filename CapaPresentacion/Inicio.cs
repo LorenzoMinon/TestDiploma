@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using CapaEntidad;
+using CapaNegocio;
+using System;
 using System.Linq;
 using System.Windows.Forms;
-using CapaEntidad;
-using CapaNegocio;
+using System.Collections.Generic;
 using FontAwesome.Sharp;
+using System.Drawing;
 
 namespace CapaPresentacion
 {
@@ -34,27 +34,16 @@ namespace CapaPresentacion
         private void AplicarPermisos()
         {
             var permisoService = new CN_Permiso();
-            List<PermisoSimple> listaPermisos = permisoService.ListarPermisosConEstado(usuarioActual.IdUsuario);
-            List<GrupoPermiso> listaGruposPermisos = permisoService.ListarGruposPermisosConEstado(usuarioActual.IdUsuario);
+            var permisosCompletos = permisoService.ListarPermisosCompletos(usuarioActual.IdUsuario);
 
-            // Lista para almacenar todos los permisos
-            List<IPermiso> permisosCompletos = new List<IPermiso>();
-
-            // Agregar permisos individuales
-            permisosCompletos.AddRange(listaPermisos.Where(p => p.Asignado));
-
-            // Agregar permisos de los grupos
-            foreach (var grupo in listaGruposPermisos.Where(g => g.Asignado))
-            {
-                var permisosGrupo = permisoService.ListarPermisosConEstadoParaGrupo(grupo.Id);
-                permisosCompletos.AddRange(permisosGrupo.Where(p => p.Asignado));
-            }
+            MessageBox.Show("Total permisos asignados: " + permisosCompletos.Count);
 
             // Recorrer todos los menús y submenús
             RecorrerMenuItems(menu.Items, permisosCompletos);
         }
 
-        private void RecorrerMenuItems(ToolStripItemCollection menuItems, List<IPermiso> permisosCompletos)
+
+        private void RecorrerMenuItems(ToolStripItemCollection menuItems, List<Component> permisosCompletos)
         {
             foreach (ToolStripMenuItem menuItem in menuItems)
             {
@@ -124,7 +113,6 @@ namespace CapaPresentacion
             AbrirFormulario(menucompras, new frmCompras(usuarioActual));
         }
 
-
         private void menuclientes_Click(object sender, EventArgs e)
         {
             AbrirFormulario((IconMenuItem)sender, new frmClientes());
@@ -173,8 +161,8 @@ namespace CapaPresentacion
         private void menuauditoria_Click(object sender, EventArgs e)
         {
             AbrirFormulario(menuauditoria, new frmReporteAuditoria());
-
         }
+
         private void Inicio_FormClosing(object sender, FormClosingEventArgs e)
         {
             CN_Usuario usuarioNegocio = new CN_Usuario();

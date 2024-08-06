@@ -27,10 +27,8 @@ namespace CapaDatos
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    permisos.Add(new PermisoSimple
+                    permisos.Add(new PermisoSimple(reader.GetInt32(0), reader.GetString(1))
                     {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1),
                         Asignado = reader.GetBoolean(2)
                     });
                 }
@@ -57,10 +55,8 @@ namespace CapaDatos
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    grupos.Add(new GrupoPermiso
+                    grupos.Add(new GrupoPermiso(reader.GetInt32(0), reader.GetString(1))
                     {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1),
                         Asignado = reader.GetBoolean(2)
                     });
                 }
@@ -83,11 +79,7 @@ namespace CapaDatos
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    permiso = new PermisoSimple
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    };
+                    permiso = new PermisoSimple(reader.GetInt32(0), reader.GetString(1));
                 }
             }
 
@@ -108,11 +100,7 @@ namespace CapaDatos
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    grupo = new GrupoPermiso
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    };
+                    grupo = new GrupoPermiso(reader.GetInt32(0), reader.GetString(1));
                 }
             }
 
@@ -171,54 +159,6 @@ namespace CapaDatos
                 connection.Open();
                 command.ExecuteNonQuery();
             }
-        }
-
-        public List<PermisoSimple> ListarPermisos()
-        {
-            List<PermisoSimple> permisos = new List<PermisoSimple>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT IdPermiso, Nombre FROM Permisos";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    permisos.Add(new PermisoSimple
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    });
-                }
-            }
-
-            return permisos;
-        }
-
-        public List<GrupoPermiso> ListarGruposPermisos()
-        {
-            List<GrupoPermiso> grupos = new List<GrupoPermiso>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = "SELECT IdGrupoPermiso, NombreGrupoPermiso FROM GruposPermisos";
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    grupos.Add(new GrupoPermiso
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    });
-                }
-            }
-
-            return grupos;
         }
 
         public int AgregarGrupoPermiso(string nombre)
@@ -281,7 +221,6 @@ namespace CapaDatos
             }
         }
 
-
         public GrupoPermiso ObtenerGrupoPermisoPorId(int idGrupoPermiso)
         {
             GrupoPermiso grupoPermiso = null;
@@ -296,45 +235,11 @@ namespace CapaDatos
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    grupoPermiso = new GrupoPermiso
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1)
-                    };
+                    grupoPermiso = new GrupoPermiso(reader.GetInt32(0), reader.GetString(1));
                 }
             }
 
             return grupoPermiso;
-        }
-
-        public List<PermisoSimple> ListarPermisosConEstadoParaGrupo(int idGrupoPermiso)
-        {
-            List<PermisoSimple> permisos = new List<PermisoSimple>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string query = @"
-                    SELECT p.IdPermiso, p.Nombre, 
-                           CASE WHEN gp.IdPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
-                    FROM Permisos p
-                    LEFT JOIN GruposPermisosDetalles gp ON p.IdPermiso = gp.IdPermiso AND gp.IdGrupoPermiso = @IdGrupoPermiso";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    permisos.Add(new PermisoSimple
-                    {
-                        Id = reader.GetInt32(0),
-                        Nombre = reader.GetString(1),
-                        Asignado = reader.GetBoolean(2)
-                    });
-                }
-            }
-
-            return permisos;
         }
 
         public void AsignarPermisoAGrupo(int idGrupoPermiso, int idPermiso)
@@ -383,9 +288,49 @@ namespace CapaDatos
 
         // Métodos para el patrón Composite
 
-        public List<IPermiso> ObtenerTodosLosPermisos()
+        public List<PermisoSimple> ListarPermisos()
         {
-            List<IPermiso> permisos = new List<IPermiso>();
+            List<PermisoSimple> permisos = new List<PermisoSimple>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT IdPermiso, Nombre FROM Permisos";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    permisos.Add(new PermisoSimple(reader.GetInt32(0), reader.GetString(1)));
+                }
+            }
+
+            return permisos;
+        }
+
+        public List<GrupoPermiso> ListarGruposPermisos()
+        {
+            List<GrupoPermiso> grupos = new List<GrupoPermiso>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT IdGrupoPermiso, NombreGrupoPermiso FROM GruposPermisos";
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    grupos.Add(new GrupoPermiso(reader.GetInt32(0), reader.GetString(1)));
+                }
+            }
+
+            return grupos;
+        }
+
+        public List<Component> ObtenerTodosLosPermisos()
+        {
+            List<Component> permisos = new List<Component>();
 
             var permisosSimples = ListarPermisos();
             permisos.AddRange(permisosSimples);
@@ -396,12 +341,52 @@ namespace CapaDatos
                 var permisosDelGrupo = ListarPermisosConEstadoParaGrupo(grupo.Id);
                 foreach (var permiso in permisosDelGrupo)
                 {
-                    grupo.Agregar(permiso);
+                    grupo.Add(permiso);
                 }
                 permisos.Add(grupo);
             }
 
             return permisos;
+        }
+
+        public List<PermisoSimple> ListarPermisosConEstadoParaGrupo(int idGrupoPermiso)
+        {
+            List<PermisoSimple> permisos = new List<PermisoSimple>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = @"
+        SELECT p.IdPermiso, p.Nombre,
+               CASE WHEN gp.IdGrupoPermiso IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS Asignado
+        FROM Permisos p
+        LEFT JOIN GruposPermisosDetalles gp ON p.IdPermiso = gp.IdPermiso AND gp.IdGrupoPermiso = @IdGrupoPermiso";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    permisos.Add(new PermisoSimple(reader.GetInt32(0), reader.GetString(1))
+                    {
+                        Asignado = reader.GetBoolean(2)
+                    });
+                }
+            }
+
+            return permisos;
+        }
+
+        public void RevocarTodosPermisosDeGrupo(int idGrupoPermiso)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "DELETE FROM GruposPermisosDetalles WHERE IdGrupoPermiso = @IdGrupoPermiso";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@IdGrupoPermiso", idGrupoPermiso);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

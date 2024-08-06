@@ -4,40 +4,39 @@ using System;
 
 namespace CapaEntidad
 {
-    public class GrupoPermiso : IPermiso
+    public class GrupoPermiso : Component
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public bool Asignado { get; set; }
-        private List<IPermiso> _permisos = new List<IPermiso>();
+        private List<Component> _children = new List<Component>();
 
-        public void Agregar(IPermiso permiso)
+        public GrupoPermiso(int id, string nombre) : base(id, nombre) { }
+
+        public override void Add(Component component)
         {
-            _permisos.Add(permiso);
+            _children.Add(component);
         }
 
-        public void Eliminar(IPermiso permiso)
+        public override void Remove(Component component)
         {
-            _permisos.Remove(permiso);
+            _children.Remove(component);
         }
 
-        public IPermiso ObtenerPermiso(int id)
+        public override Component GetChild(int id)
         {
-            return _permisos.FirstOrDefault(p => p.Id == id);
+            return _children.FirstOrDefault(c => c.Id == id);
         }
 
-        public void MostrarDetalles()
+        public override void Display(int depth)
         {
-            Console.WriteLine($"Grupo: {Nombre}");
-            foreach (var permiso in _permisos)
+            Console.WriteLine(new String('-', depth) + Nombre);
+            foreach (var child in _children)
             {
-                permiso.MostrarDetalles();
+                child.Display(depth + 2);
             }
         }
 
-        public List<IPermiso> ObtenerPermisos()
+        public List<Component> GetChildren()
         {
-            return _permisos;
+            return _children;
         }
     }
 }

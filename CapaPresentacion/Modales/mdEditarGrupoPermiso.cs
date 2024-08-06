@@ -35,6 +35,10 @@ namespace CapaPresentacion.Modales
             string nuevoNombre = txtNombreGrupo.Text.Trim();
             permisoService.EditarGrupoPermiso(IdGrupoPermiso, nuevoNombre);
 
+            // Primero, revoca todos los permisos actuales del grupo
+            permisoService.RevocarTodosPermisosDeGrupo(IdGrupoPermiso);
+
+            // Luego, asigna los permisos seleccionados en el DataGridView al grupo
             foreach (DataGridViewRow row in dgvPermisos.Rows)
             {
                 if (row.Cells["colAsignado"].Value != null && row.Cells["colNombrePermiso"].Value != null)
@@ -47,10 +51,6 @@ namespace CapaPresentacion.Modales
                     if (asignado)
                     {
                         permisoService.AsignarPermisoAGrupo(IdGrupoPermiso, permiso.Id);
-                    }
-                    else
-                    {
-                        permisoService.RevocarPermisoDeGrupo(IdGrupoPermiso, permiso.Id);
                     }
                 }
             }

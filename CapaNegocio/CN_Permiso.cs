@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CapaDatos;
 using CapaEntidad;
 
@@ -30,7 +31,7 @@ namespace CapaNegocio
             return cdPermiso.ObtenerGrupoPermisoPorNombre(nombre);
         }
 
-        public List<IPermiso> ObtenerTodosLosPermisos()
+        public List<Component> ObtenerTodosLosPermisos()
         {
             return cdPermiso.ObtenerTodosLosPermisos();
         }
@@ -98,5 +99,31 @@ namespace CapaNegocio
         {
             cdPermiso.RevocarPermisoDeGrupo(idGrupoPermiso, idPermiso);
         }
+
+        public void RevocarTodosPermisosDeGrupo(int idGrupoPermiso)
+        {
+            cdPermiso.RevocarTodosPermisosDeGrupo(idGrupoPermiso);
+        }
+
+        public List<Component> ListarPermisosCompletos(int idUsuario)
+        {
+            CD_Permiso permisoData = new CD_Permiso();
+            List<Component> permisosCompletos = new List<Component>();
+
+            // Obtener permisos individuales con estado
+            var permisosIndividuales = permisoData.ListarPermisosConEstado(idUsuario);
+            permisosCompletos.AddRange(permisosIndividuales.Where(p => p.Asignado));
+
+            // Obtener grupos de permisos con estado
+            var gruposPermisos = permisoData.ListarGruposPermisosConEstado(idUsuario);
+            foreach (var grupo in gruposPermisos.Where(g => g.Asignado))
+            {
+                var permisosGrupo = permisoData.ListarPermisosConEstadoParaGrupo(grupo.Id);
+                permisosCompletos.AddRange(permisosGrupo.Where(p => p.Asignado));
+            }
+
+            return permisosCompletos;
+        }
+
     }
 }
